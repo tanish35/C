@@ -8,7 +8,7 @@ void print(int *p)
 }
 int main()
 {
-    // int arr[5] = {1, 3, 67, 89, 0};
+    int arr[5] = {1, 3, 67, 89, 0};
     // // int *ptr = arr;
     // // *ptr = 10;
     // // ptr++;
@@ -17,10 +17,13 @@ int main()
     // // {
     // //     cout << *cur << endl;
     // // }
-    // int *p = arr;
-    // int *ptr = &arr[1];
-    // cout << *p << endl;
-    // cout << *(ptr - 1) << endl;
+    int *p = arr;
+    p = p + 1;
+    *p = 72;
+    for (int i = 0; i < 5; i++)
+    {
+        cout << arr[i] << " ";
+    }
 
     // vector<int> v = {1, 3, 67, 89, 0};
     // int *p = &v[0];
@@ -28,7 +31,14 @@ int main()
 
     // char ch[6] = "hello";
     // char *p = ch;
-    int n = 200;
-    int *p = &n;
-    print(p);
+    // int n = 200;
+    // int *p = &n;
+    // print(p);
+
+    // int n = 100;
+    // int *p = &n;
+    // p = p + 1;
+    // *p = 7;
+    // cout << *p << endl;
+    // cout << n << endl;
 }

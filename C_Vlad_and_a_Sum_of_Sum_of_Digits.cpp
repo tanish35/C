@@ -1,24 +1,37 @@
 #include <iostream>
-#include <string>
+#include <vector>
 using namespace std;
 int main()
 {
     int n;
     cin >> n;
+    vector<long long> a;
     for (int i = 0; i < n; i++)
     {
         long long k;
-        long long sum = 0;
         cin >> k;
-        for (long long j = 1; j <= k; j++)
+        if (k < a.size())
         {
-            long long b = j;
-            while (b != 0)
-            {
-                sum += b % 10;
-                b /= 10;
-            }
+            cout << a[k] << endl;
         }
-        cout << sum << endl;
-    }
+        else
+        {
+            long long sum = 0;
+            if (a.size() != 0)
+            {
+                sum = a[a.size() - 1];
+            }
+            for (int j = a.size(); j <= k; j++)
+            {
+                long long temp = j;
+                while (temp > 0)
+                {
+                    sum += temp % 10;
+                    temp /= 10;
+                }
+                a.push_back(sum);
+            }
+            cout << a[k] << endl;
+        }
+        }
 }

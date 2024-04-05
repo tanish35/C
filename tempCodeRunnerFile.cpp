@@ -1,1 +1,1 @@
-cout << ++*ptr << endl;
+cout << n;
