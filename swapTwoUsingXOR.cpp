@@ -10,4 +10,10 @@ int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    int a = 5, b = 7;
+    a = a ^ b;
+    b = a ^ b;
+    a = a ^ b;
+    cout << a << " " << b;
+    return 0;
 }
