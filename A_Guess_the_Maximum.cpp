@@ -29,66 +29,23 @@ int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
-    int t = 1;
+    int t;
     cin >> t;
     while (t--)
     {
         int n;
         cin >> n;
-
         vi a(n);
-        for (int i = 0; i < n; ++i)
+        for (int i = 0; i < n; i++)
         {
             cin >> a[i];
         }
-
-        vi b(n);
-        uset b1;
-        for (auto &x : b)
+        int min1 = INT_MAX;
+        for (int i = 0; i < n - 1; i++)
         {
-            cin >> x;
-            b1.insert(x);
+            min1 = min(max(a[i], a[i + 1]), min1);
         }
-
-        multiset<int> r;
-        for (int i = 0; i < n; ++i)
-        {
-            if (a[i] != b[i])
-                r.insert(b[i]);
-        }
-
-        int m;
-        cin >> m;
-
-        int c = 0;
-        for (int i = 0; i < m; ++i)
-        {
-            int x;
-            cin >> x;
-
-            if (r.find(x) != r.end())
-            {
-                r.erase(r.find(x));
-                if (i == m - 1)
-                    c = 1;
-            }
-            else if (b1.count(x))
-            {
-                if (i == m - 1)
-                    c = 1;
-            }
-        }
-
-        if (c && r.empty())
-        {
-            cout << "YES" << endl;
-        }
-        else
-        {
-            cout << "NO" << endl;
-        }
+        cout << min1 - 1 << endl;
     }
-
     return 0;
 }

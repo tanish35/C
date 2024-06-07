@@ -5,6 +5,7 @@ using namespace std;
 #define db double
 #define vi vector<int>
 #define vvi vector<vector<int>>
+
 struct custom_hash
 {
     static uint64_t splitmix64(uint64_t x)
@@ -22,73 +23,63 @@ struct custom_hash
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+
 #define umap unordered_map<int, int, custom_hash>
 #define uset unordered_set<int, custom_hash>
+
+// Function to calculate the greatest common divisor of two numbers
+int gcd(int a, int b)
+{
+    if (b == 0)
+        return a;
+    else
+        return gcd(b, a % b);
+}
+
+ll lcm(long long a, long long b)
+{
+    return (a * b) / gcd(a, b);
+}
 
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
-    int t = 1;
+    int t;
     cin >> t;
     while (t--)
     {
         int n;
         cin >> n;
-
         vi a(n);
-        for (int i = 0; i < n; ++i)
+        for (int i = 0; i < n; i++)
         {
             cin >> a[i];
         }
-
+        ll sum = 0;
+        ll lcm1 = a[0];
+        for (int i = 1; i < n; i++)
+        {
+            lcm1 = lcm(lcm1, a[i]);
+        }
         vi b(n);
-        uset b1;
-        for (auto &x : b)
+        for (int i = 0; i < n; i++)
         {
-            cin >> x;
-            b1.insert(x);
+            b[i] = lcm1 / a[i];
+            sum += lcm1 / a[i];
         }
-
-        multiset<int> r;
-        for (int i = 0; i < n; ++i)
+        if (sum >= lcm1)
         {
-            if (a[i] != b[i])
-                r.insert(b[i]);
-        }
-
-        int m;
-        cin >> m;
-
-        int c = 0;
-        for (int i = 0; i < m; ++i)
-        {
-            int x;
-            cin >> x;
-
-            if (r.find(x) != r.end())
-            {
-                r.erase(r.find(x));
-                if (i == m - 1)
-                    c = 1;
-            }
-            else if (b1.count(x))
-            {
-                if (i == m - 1)
-                    c = 1;
-            }
-        }
-
-        if (c && r.empty())
-        {
-            cout << "YES" << endl;
+            cout << -1;
         }
         else
         {
-            cout << "NO" << endl;
+            for (int i = 0; i < n; i++)
+            {
+                cout << b[i] << " ";
+            }
         }
+        cout << endl;
     }
-
     return 0;
 }
