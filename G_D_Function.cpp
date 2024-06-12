@@ -43,80 +43,10 @@ void print_helper(const T &t)
     cout << t;
 }
 
-// Specialization for vectors
-template <typename T>
-void print_helper(const vector<T> &v)
-{
-    cout << "[";
-    for (auto it = v.begin(); it != v.end(); ++it)
-    {
-        if (it != v.begin())
-            cout << ", ";
-        cout << *it;
-    }
-    cout << "]";
-}
-
-// Specialization for sets
-template <typename T>
-void print_helper(const set<T> &s)
-{
-    cout << "{";
-    for (auto it = s.begin(); it != s.end(); ++it)
-    {
-        if (it != s.begin())
-            cout << ", ";
-        cout << *it;
-    }
-    cout << "}";
-}
-
-// Specialization for unordered sets
-template <typename T>
-void print_helper(const unordered_set<T> &us)
-{
-    cout << "{";
-    for (auto it = us.begin(); it != us.end(); ++it)
-    {
-        if (it != us.begin())
-            cout << ", ";
-        cout << *it;
-    }
-    cout << "}";
-}
-
-// Specialization for maps
-template <typename K, typename V>
-void print_helper(const map<K, V> &m)
-{
-    cout << "{";
-    for (auto it = m.begin(); it != m.end(); ++it)
-    {
-        if (it != m.begin())
-            cout << ", ";
-        cout << it->first << ": " << it->second;
-    }
-    cout << "}";
-}
-
-// Specialization for unordered maps
-template <typename K, typename V>
-void print_helper(const unordered_map<K, V> &um)
-{
-    cout << "{";
-    for (auto it = um.begin(); it != um.end(); ++it)
-    {
-        if (it != um.begin())
-            cout << ", ";
-        cout << it->first << ": " << it->second;
-    }
-    cout << "}";
-}
-
 template <typename T, typename... Args>
 void print_helper(const T &t, const Args &...args)
 {
-    print_helper(t);
+    cout << t;
     print_helper(args...);
 }
 
@@ -126,7 +56,6 @@ void print(const Args &...args)
     print_helper(args...);
     cout << endl;
 }
-
 struct custom_hash
 {
     static uint64_t splitmix64(uint64_t x)
@@ -147,13 +76,48 @@ struct custom_hash
 #define umap unordered_map<int, int, custom_hash>
 #define uset unordered_set<int, custom_hash>
 
+const ll MOD = 1e9 + 7;
+
+ll mod(ll base, ll exp)
+{
+    ll result = 1;
+    base = base % MOD;
+    while (exp > 0)
+    {
+        if (exp % 2 == 1)
+        {
+            result = (result * base) % MOD;
+        }
+        exp = exp / 2;
+        base = (base * base) % MOD;
+    }
+    return result;
+}
+
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    print("Hello World");
-    unordered_map<int, string> um = {{1, "one"}, {2, "two"}, {3, "three"}};
-    print(um);
-
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        int l, r, k;
+        cin >> l >> r >> k;
+        if (k >= 10)
+        {
+            print(0);
+            continue;
+        }
+        int total = 10 / k;
+        if (10 % k)
+        {
+            total++;
+        }
+        int great = mod(total, r);
+        int less = mod(total, l);
+        int ans = (great - less + MOD * 2) % MOD;
+        print(ans);
+    }
     return 0;
 }

@@ -43,7 +43,6 @@ void print_helper(const T &t)
     cout << t;
 }
 
-// Specialization for vectors
 template <typename T>
 void print_helper(const vector<T> &v)
 {
@@ -57,7 +56,6 @@ void print_helper(const vector<T> &v)
     cout << "]";
 }
 
-// Specialization for sets
 template <typename T>
 void print_helper(const set<T> &s)
 {
@@ -71,7 +69,6 @@ void print_helper(const set<T> &s)
     cout << "}";
 }
 
-// Specialization for unordered sets
 template <typename T>
 void print_helper(const unordered_set<T> &us)
 {
@@ -85,7 +82,6 @@ void print_helper(const unordered_set<T> &us)
     cout << "}";
 }
 
-// Specialization for maps
 template <typename K, typename V>
 void print_helper(const map<K, V> &m)
 {
@@ -99,7 +95,6 @@ void print_helper(const map<K, V> &m)
     cout << "}";
 }
 
-// Specialization for unordered maps
 template <typename K, typename V>
 void print_helper(const unordered_map<K, V> &um)
 {
@@ -126,7 +121,6 @@ void print(const Args &...args)
     print_helper(args...);
     cout << endl;
 }
-
 struct custom_hash
 {
     static uint64_t splitmix64(uint64_t x)
@@ -151,9 +145,8 @@ int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    print("Hello World");
+    umap m;
     unordered_map<int, string> um = {{1, "one"}, {2, "two"}, {3, "three"}};
     print(um);
-
     return 0;
 }

@@ -43,80 +43,10 @@ void print_helper(const T &t)
     cout << t;
 }
 
-// Specialization for vectors
-template <typename T>
-void print_helper(const vector<T> &v)
-{
-    cout << "[";
-    for (auto it = v.begin(); it != v.end(); ++it)
-    {
-        if (it != v.begin())
-            cout << ", ";
-        cout << *it;
-    }
-    cout << "]";
-}
-
-// Specialization for sets
-template <typename T>
-void print_helper(const set<T> &s)
-{
-    cout << "{";
-    for (auto it = s.begin(); it != s.end(); ++it)
-    {
-        if (it != s.begin())
-            cout << ", ";
-        cout << *it;
-    }
-    cout << "}";
-}
-
-// Specialization for unordered sets
-template <typename T>
-void print_helper(const unordered_set<T> &us)
-{
-    cout << "{";
-    for (auto it = us.begin(); it != us.end(); ++it)
-    {
-        if (it != us.begin())
-            cout << ", ";
-        cout << *it;
-    }
-    cout << "}";
-}
-
-// Specialization for maps
-template <typename K, typename V>
-void print_helper(const map<K, V> &m)
-{
-    cout << "{";
-    for (auto it = m.begin(); it != m.end(); ++it)
-    {
-        if (it != m.begin())
-            cout << ", ";
-        cout << it->first << ": " << it->second;
-    }
-    cout << "}";
-}
-
-// Specialization for unordered maps
-template <typename K, typename V>
-void print_helper(const unordered_map<K, V> &um)
-{
-    cout << "{";
-    for (auto it = um.begin(); it != um.end(); ++it)
-    {
-        if (it != um.begin())
-            cout << ", ";
-        cout << it->first << ": " << it->second;
-    }
-    cout << "}";
-}
-
 template <typename T, typename... Args>
 void print_helper(const T &t, const Args &...args)
 {
-    print_helper(t);
+    cout << t;
     print_helper(args...);
 }
 
@@ -126,7 +56,6 @@ void print(const Args &...args)
     print_helper(args...);
     cout << endl;
 }
-
 struct custom_hash
 {
     static uint64_t splitmix64(uint64_t x)
@@ -151,9 +80,45 @@ int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    print("Hello World");
-    unordered_map<int, string> um = {{1, "one"}, {2, "two"}, {3, "three"}};
-    print(um);
-
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        int n;
+        cin >> n;
+        vll a(n);
+        for (int i = 0; i < n; i++)
+        {
+            cin >> a[i];
+        }
+        ll max = a[0];
+        ll sum = 0;
+        ll g = 0;
+        if (a[0] == 0)
+        {
+            g++;
+        }
+        for (int i = 1; i < n; i++)
+        {
+            if (a[i] > max)
+            {
+                sum += max;
+                max = a[i];
+                if (sum == max)
+                {
+                    g++;
+                }
+            }
+            else
+            {
+                sum += a[i];
+                if (sum == max)
+                {
+                    g++;
+                }
+            }
+        }
+        cout << g << endl;
+    }
     return 0;
 }

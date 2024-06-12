@@ -43,80 +43,10 @@ void print_helper(const T &t)
     cout << t;
 }
 
-// Specialization for vectors
-template <typename T>
-void print_helper(const vector<T> &v)
-{
-    cout << "[";
-    for (auto it = v.begin(); it != v.end(); ++it)
-    {
-        if (it != v.begin())
-            cout << ", ";
-        cout << *it;
-    }
-    cout << "]";
-}
-
-// Specialization for sets
-template <typename T>
-void print_helper(const set<T> &s)
-{
-    cout << "{";
-    for (auto it = s.begin(); it != s.end(); ++it)
-    {
-        if (it != s.begin())
-            cout << ", ";
-        cout << *it;
-    }
-    cout << "}";
-}
-
-// Specialization for unordered sets
-template <typename T>
-void print_helper(const unordered_set<T> &us)
-{
-    cout << "{";
-    for (auto it = us.begin(); it != us.end(); ++it)
-    {
-        if (it != us.begin())
-            cout << ", ";
-        cout << *it;
-    }
-    cout << "}";
-}
-
-// Specialization for maps
-template <typename K, typename V>
-void print_helper(const map<K, V> &m)
-{
-    cout << "{";
-    for (auto it = m.begin(); it != m.end(); ++it)
-    {
-        if (it != m.begin())
-            cout << ", ";
-        cout << it->first << ": " << it->second;
-    }
-    cout << "}";
-}
-
-// Specialization for unordered maps
-template <typename K, typename V>
-void print_helper(const unordered_map<K, V> &um)
-{
-    cout << "{";
-    for (auto it = um.begin(); it != um.end(); ++it)
-    {
-        if (it != um.begin())
-            cout << ", ";
-        cout << it->first << ": " << it->second;
-    }
-    cout << "}";
-}
-
 template <typename T, typename... Args>
 void print_helper(const T &t, const Args &...args)
 {
-    print_helper(t);
+    cout << t;
     print_helper(args...);
 }
 
@@ -126,7 +56,6 @@ void print(const Args &...args)
     print_helper(args...);
     cout << endl;
 }
-
 struct custom_hash
 {
     static uint64_t splitmix64(uint64_t x)
@@ -151,9 +80,75 @@ int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    print("Hello World");
-    unordered_map<int, string> um = {{1, "one"}, {2, "two"}, {3, "three"}};
-    print(um);
-
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        ll n;
+        cin >> n;
+        int r = n % 10;
+        int flag = 1;
+        if (r > 8)
+        {
+            flag = 0;
+            print("NO");
+            continue;
+        }
+        n = n / 10;
+        while (n > 9)
+        {
+            r = n % 10;
+            if (r < 1)
+            {
+                flag = 0;
+                print("NO");
+                break;
+            }
+            n = n / 10;
+        }
+        // print(n);
+        if (flag == 1 && n == 1)
+        {
+            print("YES");
+        }
+        else if (flag == 1)
+        {
+            print("NO");
+        }
+    }
     return 0;
 }
+
+// #include <iostream>
+// using namespace std;
+
+// #define ll long long
+
+// void solve()
+// {
+//     ll n;
+//     cin >> n;
+//     n = n - n % 10 + (n % 10 + 1) % 10;
+
+//     while (n > 9)
+//     {
+//         if (n % 10 == 0)
+//         {
+//             cout << "NO\n";
+//             return;
+//         }
+//         n /= 10;
+//     }
+//     cout << (n == 1 ? "YES\n" : "NO\n");
+// }
+
+// int main()
+// {
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(NULL);
+//     int t;
+//     cin >> t;
+//     for (int i = 0; i < t; ++i)
+//         solve();
+//     return 0;
+// }
