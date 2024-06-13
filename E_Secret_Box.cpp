@@ -16,27 +16,6 @@ using namespace std;
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
 #define rforsn(i, s, e) for (ll i = s; i >= e; i--)
-struct custom_hash
-{
-    static uint64_t splitmix64(uint64_t x)
-    {
-        // http://xorshift.di.unimi.it/splitmix64.c
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-        return x ^ (x >> 31);
-    }
-
-    size_t operator()(uint64_t x) const
-    {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
-    }
-};
-#define umap unordered_map<int, int, custom_hash>
-#define uset unordered_set<int, custom_hash>
-
-// Print function without newline
 template <typename T>
 void prints_helper(const T &t)
 {
@@ -91,7 +70,7 @@ void print_helper(const set<T> &s)
 }
 
 template <typename T>
-void print_helper(const unordered_set<T, custom_hash> &us)
+void print_helper(const unordered_set<T> &us)
 {
     cout << "{";
     for (auto it = us.begin(); it != us.end(); ++it)
@@ -117,7 +96,7 @@ void print_helper(const map<K, V> &m)
 }
 
 template <typename K, typename V>
-void print_helper(const unordered_map<K, V, custom_hash> &um)
+void print_helper(const unordered_map<K, V> &um)
 {
     cout << "{";
     for (auto it = um.begin(); it != um.end(); ++it)
@@ -142,18 +121,53 @@ void print(const Args &...args)
     print_helper(args...);
     cout << endl;
 }
+struct custom_hash
+{
+    static uint64_t splitmix64(uint64_t x)
+    {
+        // http://xorshift.di.unimi.it/splitmix64.c
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
+    }
+
+    size_t operator()(uint64_t x) const
+    {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
+#define umap unordered_map<int, int, custom_hash>
+#define uset unordered_set<int, custom_hash>
 
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    print("Hello World");
-    unordered_map<int, string, custom_hash> um = {{1, "one"}, {2, "two"}, {3, "three"}};
-    print(um);
-    uset s = {1, 2, 3, 4, 5};
-    print(s);
-    umap m = {{1, 2}, {2, 3}, {3, 4}};
-    print(m);
-
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        ll x, y, z, v;
+        cin >> x >> y >> z >> v;
+        // print(x, " ", y, " ", z, " ", v);
+        ll ans = 0;
+        forsn(i, 1, x + 1)
+        {
+            forsn(j, 1, y + 1)
+            {
+                if (v % (i * j) == 0 && v / (i * j) <= z)
+                {
+                    ll x1 = (x - i + 1);
+                    ll y1 = (y - j + 1);
+                    ll z1 = (z - v / (i * j) + 1);
+                    // print(x1, " ", y1, " ", z1);
+                    ans = max(ans, x1 * y1 * z1);
+                }
+            }
+        }
+        print(ans);
+    }
     return 0;
 }

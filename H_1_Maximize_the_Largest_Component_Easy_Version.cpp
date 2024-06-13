@@ -1,4 +1,3 @@
-
 #include <bits/stdc++.h>
 using namespace std;
 #pragma GCC optimize("Ofast")
@@ -17,6 +16,7 @@ using namespace std;
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
 #define rforsn(i, s, e) for (ll i = s; i >= e; i--)
+#define fi first
 template <typename T>
 void prints_helper(const T &t)
 {
@@ -44,10 +44,75 @@ void print_helper(const T &t)
     cout << t;
 }
 
+template <typename T>
+void print_helper(const vector<T> &v)
+{
+    cout << "[";
+    for (auto it = v.begin(); it != v.end(); ++it)
+    {
+        if (it != v.begin())
+            cout << ", ";
+        cout << *it;
+    }
+    cout << "]";
+}
+
+template <typename T>
+void print_helper(const set<T> &s)
+{
+    cout << "{";
+    for (auto it = s.begin(); it != s.end(); ++it)
+    {
+        if (it != s.begin())
+            cout << ", ";
+        cout << *it;
+    }
+    cout << "}";
+}
+
+template <typename T>
+void print_helper(const unordered_set<T> &us)
+{
+    cout << "{";
+    for (auto it = us.begin(); it != us.end(); ++it)
+    {
+        if (it != us.begin())
+            cout << ", ";
+        cout << *it;
+    }
+    cout << "}";
+}
+
+template <typename K, typename V>
+void print_helper(const map<K, V> &m)
+{
+    cout << "{";
+    for (auto it = m.begin(); it != m.end(); ++it)
+    {
+        if (it != m.begin())
+            cout << ", ";
+        cout << it->first << ": " << it->second;
+    }
+    cout << "}";
+}
+
+template <typename K, typename V>
+void print_helper(const unordered_map<K, V> &um)
+{
+    cout << "{";
+    for (auto it = um.begin(); it != um.end(); ++it)
+    {
+        if (it != um.begin())
+            cout << ", ";
+        cout << it->first << ": " << it->second;
+    }
+    cout << "}";
+}
+
 template <typename T, typename... Args>
 void print_helper(const T &t, const Args &...args)
 {
-    cout << t;
+    print_helper(t);
     print_helper(args...);
 }
 
@@ -76,149 +141,173 @@ struct custom_hash
 };
 #define umap unordered_map<int, int, custom_hash>
 #define uset unordered_set<int, custom_hash>
-#define umaps unordered_map<int, char, custom_hash>
 
-const int MAX_N = 1000000 + 100;
-
-int n, m;
-umaps grid[MAX_N];
-umap componentId[MAX_N];
-int currComponentId;
-
-int dfs(int x, int y)
+class Disjoint
 {
-    if (x < 0 || x >= n || y < 0 || y >= m || grid[x][y] == '.' || componentId[x][y] != -1)
+    vector<vector<int>> size;
+    vector<vector<pair<int, int>>> par;
+
+public:
+    Disjoint(int n, int m)
     {
-        return 0;
+        size.resize(n);
+        for (int i = 0; i < n; i++)
+        {
+            size[i].resize(m, 1);
+        }
+        par.resize(n);
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                par[i].push_back({i, j});
+            }
+        }
     }
 
-    componentId[x][y] = currComponentId;
-    int size = 1;
+    pair<int, int> findpar(pair<int, int> p)
+    {
+        if (p == par[p.first][p.second])
+        {
+            return p;
+        }
+        return par[p.first][p.second] = findpar({par[p.first][p.second].first, par[p.first][p.second].second});
+    }
 
-    size += dfs(x - 1, y);
-    size += dfs(x + 1, y);
-    size += dfs(x, y - 1);
-    size += dfs(x, y + 1);
+    int findsize(pair<int, int> p)
+    {
+        return size[p.first][p.second];
+    }
 
-    return size;
+    void unionbysize(pair<int, int> u, pair<int, int> v)
+    {
+        pair<int, int> up = findpar(u);
+        pair<int, int> vp = findpar(v);
+        if (up == vp)
+        {
+            return;
+        }
+        if (size[up.first][up.second] > size[vp.first][vp.second])
+        {
+            par[vp.first][vp.second] = {up.first, up.second};
+            size[up.first][up.second] += size[vp.first][vp.second];
+        }
+        else
+        {
+            par[up.first][up.second] = {vp.first, vp.second};
+            size[vp.first][vp.second] += size[up.first][up.second];
+        }
+        return;
+    }
+};
+
+void solve()
+{
 }
 
 int main()
 {
-    int t;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t = 1;
     cin >> t;
-
     while (t--)
     {
+        int n, m;
         cin >> n >> m;
-        umap componentSize;
+        vector<string> v(n);
         for (int i = 0; i < n; i++)
         {
-            for (int j = 0; j < m; j++)
-            {
-                cin >> grid[i][j];
-                componentId[i][j] = -1;
-            }
+            cin >> v[i];
         }
 
-        currComponentId = 1;
-        int maxSize = 0;
-
+        Disjoint ds(n + 1, m + 1);
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < m; j++)
             {
-                if (grid[i][j] == '#' && componentId[i][j] == -1)
+                if (v[i][j] == '#')
                 {
-                    componentSize[currComponentId] = dfs(i, j);
-                    maxSize = max(maxSize, componentSize[currComponentId]);
-                    currComponentId++;
+                    if (i - 1 >= 0 && v[i - 1][j] == '#')
+                    {
+                        ds.unionbysize({i, j}, {i - 1, j});
+                    }
+                    if (j - 1 >= 0 && v[i][j - 1] == '#')
+                    {
+                        ds.unionbysize({i, j}, {i, j - 1});
+                    }
                 }
             }
         }
 
+        int cnt = 0;
         for (int i = 0; i < n; i++)
         {
-            int extra = 0;
-            uset components;
-
+            int temp = 0;
+            map<pair<int, int>, int> vis;
             for (int j = 0; j < m; j++)
             {
-                if (grid[i][j] == '#')
+                if (v[i][j] == '#')
                 {
-                    components.insert(componentId[i][j]);
+                    pair<int, int> p = ds.findpar({i, j});
+                    vis[p]++;
                 }
                 else
                 {
-                    extra++;
-                    if (i > 0 && grid[i - 1][j] == '#')
+                    temp++;
+                    if (i - 1 >= 0 && v[i - 1][j] == '#')
                     {
-                        components.insert(componentId[i - 1][j]);
+                        pair<int, int> p = ds.findpar({i - 1, j});
+                        vis[p]++;
                     }
-                    if (i < n - 1 && grid[i + 1][j] == '#')
+                    if (i + 1 < n && v[i + 1][j] == '#')
                     {
-                        components.insert(componentId[i + 1][j]);
-                    }
-                    if (j > 0 && grid[i][j - 1] == '#')
-                    {
-                        components.insert(componentId[i][j - 1]);
-                    }
-                    if (j < m - 1 && grid[i][j + 1] == '#')
-                    {
-                        components.insert(componentId[i][j + 1]);
+                        pair<int, int> p = ds.findpar({i + 1, j});
+                        vis[p]++;
                     }
                 }
             }
-
-            for (auto it = components.begin(); it != components.end(); ++it)
+            for (auto it : vis)
             {
-                extra += componentSize[*it];
+                temp += ds.findsize(it.fi);
             }
-            maxSize = max(maxSize, extra);
+            cnt = max(cnt, temp);
         }
 
         for (int j = 0; j < m; j++)
         {
-            int extra = 0;
-            uset components;
-
+            int temp = 0;
+            map<pair<int, int>, int> vis;
             for (int i = 0; i < n; i++)
             {
-                if (grid[i][j] == '#')
+                if (v[i][j] == '#')
                 {
-                    components.insert(componentId[i][j]);
+                    pair<int, int> p = ds.findpar({i, j});
+                    vis[p]++;
                 }
                 else
                 {
-                    extra++;
-                    if (i > 0 && grid[i - 1][j] == '#')
+                    temp++;
+                    if (j - 1 >= 0 && v[i][j - 1] == '#')
                     {
-                        components.insert(componentId[i - 1][j]);
+                        pair<int, int> p = ds.findpar({i, j - 1});
+                        vis[p]++;
                     }
-                    if (i < n - 1 && grid[i + 1][j] == '#')
+                    if (j + 1 < m && v[i][j + 1] == '#')
                     {
-                        components.insert(componentId[i + 1][j]);
-                    }
-                    if (j > 0 && grid[i][j - 1] == '#')
-                    {
-                        components.insert(componentId[i][j - 1]);
-                    }
-                    if (j < m - 1 && grid[i][j + 1] == '#')
-                    {
-                        components.insert(componentId[i][j + 1]);
+                        pair<int, int> p = ds.findpar({i, j + 1});
+                        vis[p]++;
                     }
                 }
             }
-
-            for (auto it = components.begin(); it != components.end(); ++it)
+            for (auto it : vis)
             {
-                extra += componentSize[*it];
+                temp += ds.findsize(it.fi);
             }
-            maxSize = max(maxSize, extra);
+            cnt = max(cnt, temp);
         }
 
-        cout << maxSize << endl;
+        cout << cnt << endl;
     }
-
     return 0;
 }
