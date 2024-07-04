@@ -8,15 +8,15 @@ using namespace std;
 #define db double
 #define vi vector<int>
 #define vvi vector<vector<int>>
+#define vvll vector<vector<long long>>
 #define pb push_back
 #define mp make_pair
-#define sorta(a) sort(a.begin(), a.end())
+#define sort(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
-#define forn(i, e) for (ll i = 0; i < e; i++)
-#define forsn(i, s, e) for (ll i = s; i < e; i++)
+#define forn(i, e) for (int i = 0; i < e; i++)
+#define forsn(i, s, e) for (int i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
 #define rforsn(i, s, e) for (ll i = s; i >= e; i--)
-#define pq priority_queue<ll>
 struct custom_hash
 {
     static uint64_t splitmix64(uint64_t x)
@@ -34,8 +34,8 @@ struct custom_hash
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-#define umap unordered_map<ll, ll, custom_hash>
-#define uset unordered_set<ll, custom_hash>
+#define umap unordered_map<int, int, custom_hash>
+#define uset unordered_set<int, custom_hash>
 
 // Print function without newline
 template <typename T>
@@ -62,7 +62,7 @@ void prints(const Args &...args)
 template <typename T>
 void print_helper(const T &t)
 {
-    cout << t << " ";
+    cout << t;
 }
 
 template <typename T>
@@ -148,11 +148,80 @@ int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cout.tie(NULL);
     int t;
     cin >> t;
     while (t--)
     {
+        int n, m;
+        cin >> n >> m;
+        int a[n][m];
+        forn(i, n)
+        {
+            forn(j, m)
+            {
+                cin >> a[i][j];
+            }
+        }
+        // forn(i, n)
+        // {
+        //     forn(j, m)
+        //     {
+        //         cout << a[i][j] << " ";
+        //     }
+        //     cout << endl;
+        // }
+        forn(i, n)
+        {
+            forn(j, m)
+            {
+                int f = 1;
+                int val = -1;
+                if (i - 1 >= 0)
+                {
+                    val = max(val, a[i - 1][j]);
+                }
+                if (j - 1 >= 0)
+                {
+                    val = max(val, a[i][j - 1]);
+                }
+                if (i + 1 < n)
+                {
+                    val = max(val, a[i + 1][j]);
+                }
+                if (j + 1 < m)
+                {
+                    val = max(val, a[i][j + 1]);
+                }
+                if (i - 1 >= 0 && a[i][j] <= a[i - 1][j])
+                {
+                    f = 0;
+                }
+                if (j - 1 >= 0 && a[i][j] <= a[i][j - 1])
+                {
+                    f = 0;
+                }
+                if (i + 1 < n && a[i][j] <= a[i + 1][j])
+                {
+                    f = 0;
+                }
+                if (j + 1 < m && a[i][j] <= a[i][j + 1])
+                {
+                    f = 0;
+                }
+                if (f == 1)
+                {
+                    a[i][j] = val;
+                }
+            }
+        }
+        forn(i, n)
+        {
+            forn(j, m)
+            {
+                cout << a[i][j] << " ";
+            }
+            cout << endl;
+        }
     }
     return 0;
 }

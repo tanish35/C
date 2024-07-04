@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <numeric>
 using namespace std;
 #pragma GCC optimize("Ofast")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma")
@@ -12,6 +13,7 @@ using namespace std;
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
+#define vpll vector<pair<ll, ll>>
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
@@ -153,6 +155,17 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n, x, y;
+        cin >> n >> x >> y;
+        ll p1 = n / x;
+        ll p2 = n / y;
+        ll p3 = n / lcm(x, y);
+        p2 -= p3;
+        p1 -= p3;
+        ll sum = 0;
+        sum += ((2 * n - p1 + 1) * p1) / 2;
+        sum -= ((1 + p2) * p2) / 2;
+        print(sum);
     }
     return 0;
 }

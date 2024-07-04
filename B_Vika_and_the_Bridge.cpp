@@ -12,6 +12,7 @@ using namespace std;
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
+#define vpll vector<pair<ll, ll>>
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
@@ -153,6 +154,37 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n, k;
+        cin >> n >> k;
+        map<ll, vll> mp;
+        for (int i = 1; i <= n; i++)
+        {
+            ll x;
+            cin >> x;
+            mp[x].pb(i);
+        }
+        ll ans = INT_MAX;
+        for (auto [col, vec] : mp)
+        {
+            vec.pb(n + 1);
+            ll prev = 0;
+            pq p1;
+            for (auto i : vec)
+            {
+                p1.push(i - prev - 1);
+                prev = i;
+            }
+            ll max1 = p1.top();
+            ll max2 = INT_MAX;
+            p1.pop();
+            if (p1.size())
+            {
+                max2 = p1.top();
+                p1.pop();
+            }
+            ans = min(ans, max(max1 / 2, max2));
+        }
+        print(ans);
     }
     return 0;
 }

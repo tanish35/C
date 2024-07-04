@@ -10,13 +10,12 @@ using namespace std;
 #define vvi vector<vector<int>>
 #define pb push_back
 #define mp make_pair
-#define sorta(a) sort(a.begin(), a.end())
+#define sort(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
 #define rforsn(i, s, e) for (ll i = s; i >= e; i--)
-#define pq priority_queue<ll>
 struct custom_hash
 {
     static uint64_t splitmix64(uint64_t x)
@@ -34,8 +33,8 @@ struct custom_hash
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-#define umap unordered_map<ll, ll, custom_hash>
-#define uset unordered_set<ll, custom_hash>
+#define umap unordered_map<int, int, custom_hash>
+#define uset unordered_set<int, custom_hash>
 
 // Print function without newline
 template <typename T>
@@ -62,7 +61,7 @@ void prints(const Args &...args)
 template <typename T>
 void print_helper(const T &t)
 {
-    cout << t << " ";
+    cout << t;
 }
 
 template <typename T>
@@ -148,11 +147,22 @@ int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cout.tie(NULL);
     int t;
     cin >> t;
     while (t--)
     {
+        ll n, a, b;
+        cin >> n >> a >> b;
+        ll pro = b - a;
+        if (pro < 0)
+        {
+            pro = 0;
+        }
+        if (pro > n)
+        {
+            pro = n;
+        }
+        print(((pro * (2 * b - pro + 1)) + a * (n - pro) * 2) / 2);
     }
     return 0;
 }

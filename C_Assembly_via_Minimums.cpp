@@ -12,6 +12,7 @@ using namespace std;
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
+#define vpll vector<pair<ll, ll>>
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
@@ -68,27 +69,23 @@ void print_helper(const T &t)
 template <typename T>
 void print_helper(const vector<T> &v)
 {
-    cout << "[";
     for (auto it = v.begin(); it != v.end(); ++it)
     {
         if (it != v.begin())
-            cout << ", ";
+            cout << " ";
         cout << *it;
     }
-    cout << "]";
 }
 
 template <typename T>
 void print_helper(const set<T> &s)
 {
-    cout << "{";
     for (auto it = s.begin(); it != s.end(); ++it)
     {
         if (it != s.begin())
-            cout << ", ";
+            cout << " ";
         cout << *it;
     }
-    cout << "}";
 }
 
 template <typename T>
@@ -153,6 +150,29 @@ int main()
     cin >> t;
     while (t--)
     {
+        int n;
+        cin >> n;
+        int x = n * (n - 1) / 2;
+        vll b(x);
+        map<ll, ll> mp;
+        forn(i, x)
+        {
+            cin >> b[i];
+            mp[b[i]]++;
+        }
+        vll a(n);
+        ll i = 0;
+        for (auto [val, freq] : mp)
+        {
+            while (freq > 0)
+            {
+                a[i] = val;
+                freq -= n - i - 1;
+                i++;
+            }
+        }
+        a[n - 1] = 1000000000;
+        print(a);
     }
     return 0;
 }

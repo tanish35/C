@@ -16,27 +16,7 @@ using namespace std;
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
 #define rforsn(i, s, e) for (ll i = s; i >= e; i--)
-#define pq priority_queue<ll>
-struct custom_hash
-{
-    static uint64_t splitmix64(uint64_t x)
-    {
-        // http://xorshift.di.unimi.it/splitmix64.c
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-        return x ^ (x >> 31);
-    }
-
-    size_t operator()(uint64_t x) const
-    {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
-    }
-};
-#define umap unordered_map<ll, ll, custom_hash>
-#define uset unordered_set<ll, custom_hash>
-
+#define pq priority_queue<int>
 // Print function without newline
 template <typename T>
 void prints_helper(const T &t)
@@ -91,19 +71,6 @@ void print_helper(const set<T> &s)
     cout << "}";
 }
 
-template <typename T>
-void print_helper(const unordered_set<T, custom_hash> &us)
-{
-    cout << "{";
-    for (auto it = us.begin(); it != us.end(); ++it)
-    {
-        if (it != us.begin())
-            cout << ", ";
-        cout << *it;
-    }
-    cout << "}";
-}
-
 template <typename K, typename V>
 void print_helper(const map<K, V> &m)
 {
@@ -111,19 +78,6 @@ void print_helper(const map<K, V> &m)
     for (auto it = m.begin(); it != m.end(); ++it)
     {
         if (it != m.begin())
-            cout << ", ";
-        cout << it->first << ": " << it->second;
-    }
-    cout << "}";
-}
-
-template <typename K, typename V>
-void print_helper(const unordered_map<K, V, custom_hash> &um)
-{
-    cout << "{";
-    for (auto it = um.begin(); it != um.end(); ++it)
-    {
-        if (it != um.begin())
             cout << ", ";
         cout << it->first << ": " << it->second;
     }
@@ -153,6 +107,31 @@ int main()
     cin >> t;
     while (t--)
     {
+        map<ll, ll> mp;
+        set<int> s;
+        int n;
+        cin >> n;
+        forn(i, n)
+        {
+            int x;
+            cin >> x;
+            mp[x]++;
+            s.insert(x);
+        }
+        pq p1;
+        ll j = 0;
+        ll sum = 0;
+        for (auto i : mp)
+        {
+            sum += i.second;
+            p1.push(i.second);
+            while (sum > j)
+            {
+                sum -= p1.top();
+                p1.pop();
+                j++;
+            }
+        }
+        print(s.size() - p1.size());
     }
-    return 0;
 }

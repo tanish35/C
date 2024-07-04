@@ -11,11 +11,12 @@ using namespace std;
 #define pb push_back
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
-#define sortd(a) sort(a.begin(), a.end(), greater<int>())
+#define sortd(a) sort(a.begin(), a.end(), greater<pair<ll, ll>>())
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
 #define rforsn(i, s, e) for (ll i = s; i >= e; i--)
+#define vpll vector<pair<ll, ll>>
 #define pq priority_queue<ll>
 struct custom_hash
 {
@@ -153,6 +154,44 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n;
+        cin >> n;
+        vpll s(n);
+        vpll m(n);
+        vpll b(n);
+        forn(i, n)
+        {
+            cin >> s[i].first;
+            s[i].second = i;
+        }
+        forn(i, n)
+        {
+            cin >> m[i].first;
+            m[i].second = i;
+        }
+        forn(i, n)
+        {
+            cin >> b[i].first;
+            b[i].second = i;
+        }
+        sortd(s);
+        sortd(m);
+        sortd(b);
+        ll max1 = 0;
+        forn(i, 3)
+        {
+            forn(j, 3)
+            {
+                forn(k, 3)
+                {
+                    if (s[i].second != m[j].second && m[j].second != b[k].second && s[i].second != b[k].second)
+                    {
+                        max1 = max(max1, s[i].first + m[j].first + b[k].first);
+                    }
+                }
+            }
+        }
+        print(max1);
     }
     return 0;
 }

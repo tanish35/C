@@ -16,7 +16,6 @@ using namespace std;
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
 #define rforsn(i, s, e) for (ll i = s; i >= e; i--)
-#define pq priority_queue<ll>
 struct custom_hash
 {
     static uint64_t splitmix64(uint64_t x)
@@ -34,8 +33,8 @@ struct custom_hash
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-#define umap unordered_map<ll, ll, custom_hash>
-#define uset unordered_set<ll, custom_hash>
+#define umap unordered_map<int, int, custom_hash>
+#define uset unordered_set<int, custom_hash>
 
 // Print function without newline
 template <typename T>
@@ -62,7 +61,7 @@ void prints(const Args &...args)
 template <typename T>
 void print_helper(const T &t)
 {
-    cout << t << " ";
+    cout << t;
 }
 
 template <typename T>
@@ -148,11 +147,34 @@ int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cout.tie(NULL);
     int t;
     cin >> t;
     while (t--)
     {
+        int n, m;
+        cin >> n >> m;
+        string a, b;
+        cin >> a;
+        vi q(m);
+        forn(i, m)
+        {
+            cin >> q[i];
+        }
+        cin >> b;
+        sorta(b);
+        sorta(q);
+        int j = 0;
+        int temp = -1;
+        for (auto i : q)
+        {
+            if (temp != i)
+            {
+                a[i - 1] = b[j];
+                temp = i;
+                j++;
+            }
+        }
+        print(a);
     }
     return 0;
 }

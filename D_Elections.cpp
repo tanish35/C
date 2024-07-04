@@ -8,6 +8,7 @@ using namespace std;
 #define db double
 #define vi vector<int>
 #define vvi vector<vector<int>>
+#define vllp vector<pair<ll, ll>>
 #define pb push_back
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
@@ -16,7 +17,6 @@ using namespace std;
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
 #define rforsn(i, s, e) for (ll i = s; i >= e; i--)
-#define pq priority_queue<ll>
 struct custom_hash
 {
     static uint64_t splitmix64(uint64_t x)
@@ -34,8 +34,8 @@ struct custom_hash
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-#define umap unordered_map<ll, ll, custom_hash>
-#define uset unordered_set<ll, custom_hash>
+#define umap unordered_map<int, int, custom_hash>
+#define uset unordered_set<int, custom_hash>
 
 // Print function without newline
 template <typename T>
@@ -62,7 +62,7 @@ void prints(const Args &...args)
 template <typename T>
 void print_helper(const T &t)
 {
-    cout << t << " ";
+    cout << t;
 }
 
 template <typename T>
@@ -148,11 +148,65 @@ int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cout.tie(NULL);
     int t;
     cin >> t;
     while (t--)
     {
+        ll n, c;
+        cin >> n >> c;
+        vll a(n);
+        ll max1 = 0;
+        ll maxid = 0;
+        vll sum(n);
+        forn(i, n)
+        {
+            ll x;
+            cin >> x;
+            if (x > max1)
+            {
+                max1 = x;
+                maxid = i;
+            }
+            a[i] = x;
+        }
+        a[0] += c;
+        sum[0] = a[0];
+        forsn(i, 1, n)
+        {
+            sum[i] = sum[i - 1] + a[i];
+        }
+        if (a[0] >= max1)
+        {
+            max1 = a[0];
+            maxid = 0;
+        }
+        forn(i, n)
+        {
+            ll count = i;
+            if (i == maxid)
+            {
+                prints(0, " ");
+                continue;
+            }
+            if (i > maxid)
+            {
+                prints(count, " ");
+                continue;
+            }
+            else
+            {
+                if (sum[i] >= max1)
+                {
+                    prints(count, " ");
+                    continue;
+                }
+                else
+                {
+                    prints(count + 1, " ");
+                }
+            }
+        }
+        print("");
     }
     return 0;
 }

@@ -10,13 +10,12 @@ using namespace std;
 #define vvi vector<vector<int>>
 #define pb push_back
 #define mp make_pair
-#define sorta(a) sort(a.begin(), a.end())
+#define sort(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
 #define rforsn(i, s, e) for (ll i = s; i >= e; i--)
-#define pq priority_queue<ll>
 struct custom_hash
 {
     static uint64_t splitmix64(uint64_t x)
@@ -34,8 +33,8 @@ struct custom_hash
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-#define umap unordered_map<ll, ll, custom_hash>
-#define uset unordered_set<ll, custom_hash>
+#define umap unordered_map<int, int, custom_hash>
+#define uset unordered_set<int, custom_hash>
 
 // Print function without newline
 template <typename T>
@@ -62,20 +61,20 @@ void prints(const Args &...args)
 template <typename T>
 void print_helper(const T &t)
 {
-    cout << t << " ";
+    cout << t;
 }
 
 template <typename T>
 void print_helper(const vector<T> &v)
 {
-    cout << "[";
+    // cout << "[";
     for (auto it = v.begin(); it != v.end(); ++it)
     {
         if (it != v.begin())
-            cout << ", ";
+            cout << " ";
         cout << *it;
     }
-    cout << "]";
+    // cout << "]";
 }
 
 template <typename T>
@@ -148,11 +147,50 @@ int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cout.tie(NULL);
     int t;
     cin >> t;
     while (t--)
     {
+        ll n, k;
+        cin >> n >> k;
+        ll val = 0;
+        if (n % 2)
+        {
+            val = ((n + 1) / 2) * (n - 1);
+        }
+        else
+        {
+            val = (n / 2) * n;
+        }
+        // print(val);
+        if (k % 2 || k > val)
+        {
+            cout << "NO" << endl;
+            continue;
+        }
+        vll a(n);
+        forsn(i, 1, n + 1)
+        {
+            a[i - 1] = i;
+        }
+        for (ll i = 0; i < n && k > 0; i++)
+        {
+            ll max1 = (a[n - i - 1] - a[i]) * 2;
+            // cout << max1 << endl;
+            if (k >= max1)
+            {
+                swap(a[n - i - 1], a[i]);
+                k -= max1;
+            }
+            else
+            {
+                k = k / 2;
+                swap(a[i], a[i + k]);
+                break;
+            }
+        }
+        cout << "YES" << endl;
+        print(a);
     }
     return 0;
 }

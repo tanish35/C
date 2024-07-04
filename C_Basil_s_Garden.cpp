@@ -16,7 +16,6 @@ using namespace std;
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
 #define rforsn(i, s, e) for (ll i = s; i >= e; i--)
-#define pq priority_queue<ll>
 struct custom_hash
 {
     static uint64_t splitmix64(uint64_t x)
@@ -34,8 +33,8 @@ struct custom_hash
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-#define umap unordered_map<ll, ll, custom_hash>
-#define uset unordered_set<ll, custom_hash>
+#define umap unordered_map<int, int, custom_hash>
+#define uset unordered_set<int, custom_hash>
 
 // Print function without newline
 template <typename T>
@@ -153,6 +152,25 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n;
+        cin >> n;
+        vll a(n);
+        forn(i, n) cin >> a[i];
+        ll ans = a[n - 1];
+        ll temp = a[n - 1];
+        rforn(i, n - 2)
+        {
+            if (a[i] > a[i + 1])
+            {
+                temp = max(temp + 1, a[i]);
+            }
+            else
+            {
+                temp++;
+            }
+            ans = max(ans, temp);
+        }
+        print(ans);
     }
     return 0;
 }
