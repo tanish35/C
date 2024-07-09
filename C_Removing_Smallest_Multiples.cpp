@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include "fiostream_x86.h"
 using namespace std;
 #pragma GCC optimize("Ofast")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma")
@@ -13,6 +12,7 @@ using namespace std;
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
+#define vpll vector<pair<ll, ll>>
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
@@ -154,6 +154,31 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n;
+        cin >> n;
+        string s;
+        cin >> s;
+        ll ans = 0;
+        forsn(i, 1, n + 1)
+        {
+            if (s[i - 1] == '0' || s[i - 1] == '2')
+            {
+                for (ll j = 1; j * i <= n; j++)
+                {
+                    ll temp = j * i - 1;
+                    if (s[temp] == '1')
+                    {
+                        break;
+                    }
+                    else if (s[temp] == '0')
+                    {
+                        ans += i;
+                        s[temp] = '2';
+                    }
+                }
+            }
+        }
+        print(ans);
     }
     return 0;
 }

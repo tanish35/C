@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include "fiostream_x86.h"
 using namespace std;
 #pragma GCC optimize("Ofast")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma")
@@ -13,6 +12,7 @@ using namespace std;
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
+#define vpll vector<pair<ll, ll>>
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
@@ -154,6 +154,56 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n;
+        cin >> n;
+        vll a(n);
+        forn(i, n)
+        {
+            cin >> a[i];
+        }
+        if (n == 1)
+        {
+            print(1);
+            continue;
+        }
+        ll min1 = 1;
+        vll b;
+        int flag = -1;
+        forn(i, n - 1)
+        {
+            if (a[i] > a[i + 1])
+            {
+                flag = 1;
+                break;
+            }
+            else if (a[i] < a[i + 1])
+            {
+                flag = 0;
+                break;
+            }
+        }
+        if (flag == -1)
+        {
+            print(1);
+            continue;
+        }
+        forsn(i, 1, n - 1)
+        {
+            if (a[i] > a[i + 1] && flag == 0)
+            {
+                b.pb(a[i]);
+                min1++;
+                flag = 1;
+            }
+            else if (a[i] < a[i + 1] && flag == 1)
+            {
+                b.pb(a[i]);
+                min1++;
+                flag = 0;
+            }
+        }
+        min1++;
+        print(min1);
     }
     return 0;
 }

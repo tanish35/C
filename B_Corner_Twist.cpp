@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include "fiostream_x86.h"
 using namespace std;
 #pragma GCC optimize("Ofast")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma")
@@ -9,10 +8,12 @@ using namespace std;
 #define db double
 #define vi vector<int>
 #define vvi vector<vector<int>>
+#define vvll vector<vector<long long>>
 #define pb push_back
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
+#define vpll vector<pair<ll, ll>>
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
@@ -154,6 +155,68 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n, m;
+        cin >> n >> m;
+        vvll a(n, vll(m));
+        vvll b(n, vll(m));
+        forn(i, n)
+        {
+            forn(j, m)
+            {
+                char c;
+                cin >> c;
+                a[i][j] = c - '0';
+            }
+        }
+        forn(i, n)
+        {
+            forn(j, m)
+            {
+                char c;
+                cin >> c;
+                b[i][j] = c - '0';
+            }
+        }
+        forn(i, n - 1)
+        {
+            forn(j, m - 1)
+            {
+                if (a[i][j] == b[i][j])
+                    continue;
+                else if (b[i][j] - a[i][j] == -2 || b[i][j] - a[i][j] == 1)
+                {
+                    a[i][j] = (a[i][j] + 1) % 3;
+                    a[i + 1][j + 1] = (a[i + 1][j + 1] + 1) % 3;
+                    a[i + 1][j] = (a[i + 1][j] + 2) % 3;
+                    a[i][j + 1] = (a[i][j + 1] + 2) % 3;
+                }
+                else
+                {
+                    a[i][j] = (a[i][j] + 2) % 3;
+                    a[i + 1][j + 1] = (a[i + 1][j + 1] + 2) % 3;
+                    a[i + 1][j] = (a[i + 1][j] + 1) % 3;
+                    a[i][j + 1] = (a[i][j + 1] + 1) % 3;
+                }
+            }
+        }
+        int flag = 0;
+        forn(i, n)
+        {
+            forn(j, m)
+            {
+                if (a[i][j] != b[i][j])
+                {
+                    flag = 1;
+                    break;
+                }
+            }
+            if (flag)
+                break;
+        }
+        if (flag)
+            print("NO");
+        else
+            print("YES");
     }
     return 0;
 }

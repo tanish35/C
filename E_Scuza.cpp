@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include "fiostream_x86.h"
 using namespace std;
 #pragma GCC optimize("Ofast")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma")
@@ -13,6 +12,7 @@ using namespace std;
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
+#define vpll vector<pair<ll, ll>>
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
@@ -144,6 +144,33 @@ void print(const Args &...args)
     print_helper(args...);
     cout << endl;
 }
+ll binarySearch(const vll &vec, ll target)
+{
+    ll low = 0;
+    ll high = vec.size() - 1;
+    if (target > vec[high])
+    {
+        return high;
+    }
+    while (low <= high)
+    {
+        int mid = low + (high - low) / 2;
+
+        if (vec[mid] == target)
+        {
+            return mid;
+        }
+        else if (vec[mid] < target)
+        {
+            low = mid + 1;
+        }
+        else
+        {
+            high = mid - 1;
+        }
+    }
+    return low - 1;
+}
 
 int main()
 {
@@ -154,6 +181,43 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n, q;
+        cin >> n >> q;
+        vll a(n);
+        forn(i, n)
+        {
+            cin >> a[i];
+        }
+        ll max1 = a[0];
+        ll count = 0;
+        vll steps;
+        vll stepsheight;
+        steps.pb(0);
+        stepsheight.pb(0);
+        forn(i, n)
+        {
+            if (a[i] > max1)
+            {
+                stepsheight.pb(max1);
+                max1 = a[i];
+                steps.pb(count);
+                count += a[i];
+            }
+            else
+            {
+                count += a[i];
+            }
+        }
+        stepsheight.pb(max1);
+        steps.pb(count);
+        vll b(q);
+        forn(i, q)
+        {
+            cin >> b[i];
+            ll ind = binarySearch(stepsheight, b[i]);
+            prints(steps[ind], " ");
+        }
+        cout << endl;
     }
     return 0;
 }

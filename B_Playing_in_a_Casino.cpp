@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include "fiostream_x86.h"
 using namespace std;
 #pragma GCC optimize("Ofast")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma")
@@ -9,10 +8,12 @@ using namespace std;
 #define db double
 #define vi vector<int>
 #define vvi vector<vector<int>>
+#define vvll vector<vector<long long>>
 #define pb push_back
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
+#define vpll vector<pair<ll, ll>>
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
@@ -154,6 +155,39 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n, m;
+        cin >> n >> m;
+        vvll v(n, vll(m));
+        forn(i, n)
+        {
+            forn(j, m)
+            {
+                cin >> v[i][j];
+            }
+        }
+        if (n == 1)
+        {
+            print(0);
+            continue;
+        }
+        ll ans = 0;
+        forn(i, m)
+        {
+            pq p1;
+            forn(j, n)
+            {
+                p1.push(v[j][i]);
+            }
+            ll temp = n - 1;
+            forn(j, n)
+            {
+                ll x = p1.top();
+                ans += temp * x;
+                temp -= 2;
+                p1.pop();
+            }
+        }
+        print(ans);
     }
     return 0;
 }

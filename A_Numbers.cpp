@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include "fiostream_x86.h"
 using namespace std;
 #pragma GCC optimize("Ofast")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma")
@@ -13,6 +12,7 @@ using namespace std;
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
+#define vpll vector<pair<ll, ll>>
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
@@ -150,10 +150,23 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+    ll n;
+    cin >> n;
+    ll totalSum = 0;
+    forsn(i, 2, n)
     {
+        ll temp = n;
+        ll sum = 0;
+        while (temp)
+        {
+            sum += temp % i;
+            temp /= i;
+        }
+        // print(sum, i);
+        totalSum += sum;
     }
+    // cout << totalSum << " ";
+    ll gcd = __gcd(totalSum, n - 2);
+    cout << totalSum / gcd << "/" << (n - 2) / gcd;
     return 0;
 }
