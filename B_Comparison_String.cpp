@@ -8,7 +8,6 @@ using namespace std;
 #define db double
 #define vi vector<int>
 #define vvi vector<vector<int>>
-#define vvll vector<vector<long long>>
 #define pb push_back
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
@@ -173,13 +172,25 @@ int main()
     {
         ll n;
         cin >> n;
-        vvll a(3, vll(n));
-        forn(i, 3)
+        string s;
+        cin >> s;
+
+        ll cnt = 1;
+        ll ans = 0;
+        forn(i, n - 1)
         {
-            forn(j, n)
+            if (s[i] != s[i + 1])
             {
-                cin >> a[i][j];
+                ans = max(ans, cnt);
+                cnt = 1;
+            }
+            else
+            {
+                cnt++;
             }
         }
-        return 0;
+        ans = max(ans, cnt) + 1;
+        print(ans);
     }
+    return 0;
+}

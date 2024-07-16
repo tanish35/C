@@ -8,7 +8,6 @@ using namespace std;
 #define db double
 #define vi vector<int>
 #define vvi vector<vector<int>>
-#define vvll vector<vector<long long>>
 #define pb push_back
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
@@ -38,22 +37,6 @@ struct custom_hash
 };
 #define umap unordered_map<ll, ll, custom_hash>
 #define uset unordered_set<ll, custom_hash>
-
-ll pow(ll base, ll exponent, ll modulus)
-{
-    ll result = 1;
-    base = base % modulus;
-    while (exponent > 0)
-    {
-        if (exponent % 2 == 1)
-        {
-            result = (result * base) % modulus;
-        }
-        exponent = exponent >> 1;
-        base = (base * base) % modulus;
-    }
-    return result;
-}
 
 // Print function without newline
 template <typename T>
@@ -171,15 +154,13 @@ int main()
     cin >> t;
     while (t--)
     {
-        ll n;
-        cin >> n;
-        vvll a(3, vll(n));
-        forn(i, 3)
-        {
-            forn(j, n)
-            {
-                cin >> a[i][j];
-            }
-        }
-        return 0;
+        ll n, k;
+        cin >> n >> k;
+        ll temp1 = n % k;
+        if (temp1 % 2 == 0 || (temp1 + k) % 2 == 0)
+            print("YES");
+        else
+            print("NO");
     }
+    return 0;
+}

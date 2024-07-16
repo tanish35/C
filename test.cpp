@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include "fiostream_x86.h"
 using namespace std;
 #pragma GCC optimize("Ofast")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma")
@@ -13,6 +12,7 @@ using namespace std;
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
+#define vpll vector<pair<ll, ll>>
 #define forn(i, e) for (ll i = 0; i < e; i++)
 #define forsn(i, s, e) for (ll i = s; i < e; i++)
 #define rforn(i, s) for (ll i = s; i >= 0; i--)
@@ -37,6 +37,22 @@ struct custom_hash
 };
 #define umap unordered_map<ll, ll, custom_hash>
 #define uset unordered_set<ll, custom_hash>
+
+ll pow(ll base, ll exponent, ll modulus)
+{
+    ll result = 1;
+    base = base % modulus;
+    while (exponent > 0)
+    {
+        if (exponent % 2 == 1)
+        {
+            result = (result * base) % modulus;
+        }
+        exponent = exponent >> 1;
+        base = (base * base) % modulus;
+    }
+    return result;
+}
 
 // Print function without newline
 template <typename T>
@@ -139,7 +155,7 @@ void print_helper(const T &t, const Args &...args)
 }
 
 template <typename... Args>
-void print(const Args &...args)
+void p(const Args &...args)
 {
     print_helper(args...);
     cout << endl;
@@ -154,6 +170,7 @@ int main()
     cin >> t;
     while (t--)
     {
+        p(5);
     }
     return 0;
 }

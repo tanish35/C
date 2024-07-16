@@ -8,7 +8,6 @@ using namespace std;
 #define db double
 #define vi vector<int>
 #define vvi vector<vector<int>>
-#define vvll vector<vector<long long>>
 #define pb push_back
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
@@ -38,22 +37,6 @@ struct custom_hash
 };
 #define umap unordered_map<ll, ll, custom_hash>
 #define uset unordered_set<ll, custom_hash>
-
-ll pow(ll base, ll exponent, ll modulus)
-{
-    ll result = 1;
-    base = base % modulus;
-    while (exponent > 0)
-    {
-        if (exponent % 2 == 1)
-        {
-            result = (result * base) % modulus;
-        }
-        exponent = exponent >> 1;
-        base = (base * base) % modulus;
-    }
-    return result;
-}
 
 // Print function without newline
 template <typename T>
@@ -173,13 +156,37 @@ int main()
     {
         ll n;
         cin >> n;
-        vvll a(3, vll(n));
-        forn(i, 3)
+        vll a(n);
+        umap mp;
+        forn(i, n)
         {
-            forn(j, n)
+            cin >> a[i];
+            for (ll j = 2; j * j <= a[i]; j++)
             {
-                cin >> a[i][j];
+                if (a[i] % j == 0)
+                {
+                    while (a[i] % j == 0)
+                    {
+                        a[i] /= j;
+                        mp[j]++;
+                    }
+                }
+            }
+            if (a[i] > 1)
+                mp[a[i]]++;
+        }
+        int flag = 0;
+        for (auto [div, cnt] : mp)
+        {
+            if (cnt % n != 0)
+            {
+                print("NO");
+                flag = 1;
+                break;
             }
         }
-        return 0;
+        if (flag == 0)
+            print("YES");
     }
+    return 0;
+}

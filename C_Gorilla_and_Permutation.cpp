@@ -8,7 +8,6 @@ using namespace std;
 #define db double
 #define vi vector<int>
 #define vvi vector<vector<int>>
-#define vvll vector<vector<long long>>
 #define pb push_back
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
@@ -38,22 +37,6 @@ struct custom_hash
 };
 #define umap unordered_map<ll, ll, custom_hash>
 #define uset unordered_set<ll, custom_hash>
-
-ll pow(ll base, ll exponent, ll modulus)
-{
-    ll result = 1;
-    base = base % modulus;
-    while (exponent > 0)
-    {
-        if (exponent % 2 == 1)
-        {
-            result = (result * base) % modulus;
-        }
-        exponent = exponent >> 1;
-        base = (base * base) % modulus;
-    }
-    return result;
-}
 
 // Print function without newline
 template <typename T>
@@ -86,14 +69,12 @@ void print_helper(const T &t)
 template <typename T>
 void print_helper(const vector<T> &v)
 {
-    cout << "[";
     for (auto it = v.begin(); it != v.end(); ++it)
     {
         if (it != v.begin())
-            cout << ", ";
+            cout << " ";
         cout << *it;
     }
-    cout << "]";
 }
 
 template <typename T>
@@ -171,15 +152,26 @@ int main()
     cin >> t;
     while (t--)
     {
-        ll n;
-        cin >> n;
-        vvll a(3, vll(n));
-        forn(i, 3)
+        ll n, m, k;
+        cin >> n >> m >> k;
+        vll v(n);
+        ll it = 0;
+        for (ll i = n; i >= k; i--)
         {
-            forn(j, n)
-            {
-                cin >> a[i][j];
-            }
+            v[it] = i;
+            it++;
         }
-        return 0;
+        for (ll i = m + 1; i <= k - 1; i++)
+        {
+            v[it] = i;
+            it++;
+        }
+        for (ll i = 1; i <= m; i++)
+        {
+            v[it] = i;
+            it++;
+        }
+        print(v);
     }
+    return 0;
+}

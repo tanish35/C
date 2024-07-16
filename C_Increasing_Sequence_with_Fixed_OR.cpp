@@ -8,7 +8,6 @@ using namespace std;
 #define db double
 #define vi vector<int>
 #define vvi vector<vector<int>>
-#define vvll vector<vector<long long>>
 #define pb push_back
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
@@ -86,14 +85,13 @@ void print_helper(const T &t)
 template <typename T>
 void print_helper(const vector<T> &v)
 {
-    cout << "[";
+
     for (auto it = v.begin(); it != v.end(); ++it)
     {
         if (it != v.begin())
-            cout << ", ";
+            cout << " ";
         cout << *it;
     }
-    cout << "]";
 }
 
 template <typename T>
@@ -173,13 +171,20 @@ int main()
     {
         ll n;
         cin >> n;
-        vvll a(3, vll(n));
-        forn(i, 3)
+        vll ans;
+        ll count = 0;
+        for (ll i = 0; i <= 60; i++)
         {
-            forn(j, n)
+            ll mask = 1LL << i;
+            if ((n & mask) && n != mask)
             {
-                cin >> a[i][j];
+                ans.pb(n - mask);
             }
         }
-        return 0;
+        ans.pb(n);
+        sorta(ans);
+        print(ans.size());
+        print(ans);
     }
+    return 0;
+}

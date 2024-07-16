@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 #pragma GCC optimize("Ofast")
+#include <utility>
+#include <functional>
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2,fma")
 #pragma GCC optimize("unroll-loops")
 #define ll long long
@@ -29,15 +31,16 @@ struct custom_hash
         return x ^ (x >> 31);
     }
 
-    size_t operator()(uint64_t x) const
+    size_t operator()(pair<ll, ll> x) const
     {
         static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
+        size_t hash1 = splitmix64(x.first + FIXED_RANDOM);
+        size_t hash2 = splitmix64(x.second + FIXED_RANDOM);
+        return hash1 ^ (hash2 >> 1);
     }
 };
-#define umap unordered_map<ll, ll, custom_hash>
-#define uset unordered_set<ll, custom_hash>
 
+#define umap unordered_map<pair<ll, ll>, ll, custom_hash>
 // Print function without newline
 template <typename T>
 void prints_helper(const T &t)
@@ -157,21 +160,14 @@ int main()
         ll n, x, y;
         cin >> n >> x >> y;
         vll a(n);
-        forn(i, n) cin >> a[i];
-        map<pair<ll, ll>, ll> rem;
+        umap rem;
         ll ans = 0;
         forn(i, n)
         {
-            ll xrem = a[i] % x;
-            ll yrem = a[i] % y;
-            if (rem.find({x - xrem, yrem}) != rem.end())
-            {
-                ans += rem[{x - xrem, yrem}];
-            }
-            if (xrem == 0)
-            {
-                xrem = x;
-            }
+            cin >> a[i];
+            ll xrem = a[i] % x, yrem = a[i] % y;
+            ans += rem[{x - xrem, yrem}];
+            xrem = (xrem == 0) ? x : xrem;
             rem[{xrem, yrem}]++;
         }
         print(ans);

@@ -9,6 +9,7 @@ using namespace std;
 #define vi vector<int>
 #define vvi vector<vector<int>>
 #define vvll vector<vector<long long>>
+#define vvc vector<vector<char>>
 #define pb push_back
 #define mp make_pair
 #define sorta(a) sort(a.begin(), a.end())
@@ -38,22 +39,6 @@ struct custom_hash
 };
 #define umap unordered_map<ll, ll, custom_hash>
 #define uset unordered_set<ll, custom_hash>
-
-ll pow(ll base, ll exponent, ll modulus)
-{
-    ll result = 1;
-    base = base % modulus;
-    while (exponent > 0)
-    {
-        if (exponent % 2 == 1)
-        {
-            result = (result * base) % modulus;
-        }
-        exponent = exponent >> 1;
-        base = (base * base) % modulus;
-    }
-    return result;
-}
 
 // Print function without newline
 template <typename T>
@@ -173,13 +158,48 @@ int main()
     {
         ll n;
         cin >> n;
-        vvll a(3, vll(n));
-        forn(i, 3)
+        vvc a(n, vector<char>(n));
+        forn(i, n)
         {
             forn(j, n)
             {
                 cin >> a[i][j];
             }
         }
-        return 0;
+        ll op = 0;
+        ll j1 = 0;
+        forn(i, n)
+        {
+            ll temp = n - 1;
+            forn(j, n)
+            {
+                if (a[i][j] != a[temp][j1])
+                {
+                    op += abs(a[i][j] - a[temp][j1]);
+                    a[i][j] = max(a[i][j], a[temp][j1]);
+                    a[temp][j1] = max(a[i][j], a[temp][j1]);
+                }
+                temp--;
+            }
+            j1++;
+        }
+        j1 = 0;
+        forn(i, n)
+        {
+            ll temp = n - 1;
+            forn(j, n)
+            {
+                if (a[i][j] != a[temp][j1])
+                {
+                    op += abs(a[i][j] - a[temp][j1]);
+                    a[i][j] = max(a[i][j], a[temp][j1]);
+                    a[temp][j1] = max(a[i][j], a[temp][j1]);
+                }
+                temp--;
+            }
+            j1++;
+        }
+        print(op);
     }
+    return 0;
+}
