@@ -1,25 +1,27 @@
-def max_winning_rounds(n, l, r, cards):
-    max_rounds = 0
-    start = 0
+def find_winner(test_cases):
+    results = []
     
-    while start < n:
-        current_sum = 0
-        valid_round_found = False
-        for end in range(start, n):
-            current_sum += cards[end]
-            if l <= current_sum <= r:
-                max_rounds += 1
-                start = end + 1  # Move start to the next position after the current subarray end
-                valid_round_found = True
-                break
-        if not valid_round_found:
-            break  # If no valid round is found, exit the loop
+    for test in test_cases:
+        n, piles = test
+        total_sum = sum(piles)
+        
+        if total_sum % 2 == 0:
+            results.append("Bob")
+        else:
+            results.append("Alice")
     
-    return max_rounds
+    return results
 
-# Example usage:
-n = 5
-l = 5
-r = 6
-cards = [1, 4, 2, 6, 4]
-print(max_winning_rounds(n, l, r, cards))  # Output should be 2
+# Reading input
+t = int(input())
+test_cases = []
+for _ in range(t):
+    n = int(input())
+    piles = list(map(int, input().split()))
+    test_cases.append((n, piles))
+
+# Processing and printing output
+results = find_winner(test_cases)
+for result in results:
+    print(result)
+

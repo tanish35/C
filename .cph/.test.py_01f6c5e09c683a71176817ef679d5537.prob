@@ -1,0 +1,1 @@
+{"name":"Local: test","url":"c:\\Users\\HP\\Desktop\\C++\\test.py","tests":[{"id":1723739455147,"input":"3\n3\n3 2 9\n4\n3 3 6 1\n5\n1 2 3 4 5\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\HP\\Desktop\\C++\\test.py","group":"local","local":true}
