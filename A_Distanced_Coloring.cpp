@@ -164,7 +164,7 @@ int main() {
     int t;
     cin >> t;
     while (t--) {
-        print("Hello world");
+        
     }
     return 0;
 }
