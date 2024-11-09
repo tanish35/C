@@ -113,20 +113,36 @@ ll pow(ll base, ll exponent, ll modulus)
     return result;
 }
 
-#ifndef ONLINE_JUDGE
-#define DEBUG(x)         \
-    cout << #x << " = "; \
-    print_debug(x);      \
-    cout << endl;
-#else
-#define DEBUG(x)
-#endif
+// Print function without newline
+template <typename T>
+void prints_helper(const T &t)
+{
+    cout << t;
+}
+
+template <typename T, typename... Args>
+void prints_helper(const T &t, const Args &...args)
+{
+    cout << t;
+    prints_helper(args...);
+}
+
+template <typename... Args>
+void prints(const Args &...args)
+{
+    prints_helper(args...);
+}
+
+// Print function with newline
 
 template <typename T>
-void print_debug(const T &t) { cout << t; }
+void print_helper(const T &t)
+{
+    cout << t << " ";
+}
 
 template <typename T>
-void print_debug(const vector<T> &v)
+void print_helper(const vector<T> &v)
 {
     cout << "[";
     for (auto it = v.begin(); it != v.end(); ++it)
@@ -139,7 +155,7 @@ void print_debug(const vector<T> &v)
 }
 
 template <typename T>
-void print_debug(const set<T> &s)
+void print_helper(const set<T> &s)
 {
     cout << "{";
     for (auto it = s.begin(); it != s.end(); ++it)
@@ -152,7 +168,7 @@ void print_debug(const set<T> &s)
 }
 
 template <typename T>
-void print_debug(const unordered_set<T, custom_hash> &us)
+void print_helper(const unordered_set<T, custom_hash> &us)
 {
     cout << "{";
     for (auto it = us.begin(); it != us.end(); ++it)
@@ -165,7 +181,7 @@ void print_debug(const unordered_set<T, custom_hash> &us)
 }
 
 template <typename K, typename V>
-void print_debug(const map<K, V> &m)
+void print_helper(const map<K, V> &m)
 {
     cout << "{";
     for (auto it = m.begin(); it != m.end(); ++it)
@@ -178,7 +194,7 @@ void print_debug(const map<K, V> &m)
 }
 
 template <typename K, typename V>
-void print_debug(const unordered_map<K, V, custom_hash> &um)
+void print_helper(const unordered_map<K, V, custom_hash> &um)
 {
     cout << "{";
     for (auto it = um.begin(); it != um.end(); ++it)
@@ -188,6 +204,20 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
         cout << it->first << ": " << it->second;
     }
     cout << "}";
+}
+
+template <typename T, typename... Args>
+void print_helper(const T &t, const Args &...args)
+{
+    print_helper(t);
+    print_helper(args...);
+}
+
+template <typename... Args>
+void print(const Args &...args)
+{
+    print_helper(args...);
+    cout << endl;
 }
 
 int main()
@@ -201,26 +231,31 @@ int main()
     {
         ll n;
         cin >> n;
-        vll a(n);
-        forn(i, n) cin >> a[i];
-        ll ans = 0;
-        forn(i, n)
+        vll a(n + 1);
+        umap m;
+        forsn(i, 1, n + 1)
         {
-            forsn(j, i, n)
+            cin >> a[i];
+            m[a[i]] = i;
+        }
+        ll ans = 0;
+        forsn(i, 1, n + 1)
+        {
+            if (a[i] != i && a[a[i]] != i)
             {
-                ll sum = 0;
-                forsn(k, i, j + 1)
-                {
-                    sum += a[k];
-                }
-                ll sq = sqrt(sum);
-                if (sq * sq == sum)
-                {
-                    ans++;
-                }
+                ans++;
+                m[a[a[i]]] = m[i];
+                swap(a[a[i]], a[m[i]]);
             }
         }
-        cout << ans << endl;
+        print(ans);
     }
     return 0;
 }
+
+/*
+{8: 9, 5: 8, 7: 10, 2: 7, 10: 5, 6:1, 4: 2, 3: 4, 9: 3, 1: 3}
+[6 4 9 3 10 1 2 5 8 7]
+{1: 3, 2: 7, 3: 7, 4: 2, 5: 8, 6: 1, 7: 10, 8: 7, 9: 3, 10: 5}
+[6, 4, 9, 2, 10, 1, 8, 5, 3, 7]
+*/

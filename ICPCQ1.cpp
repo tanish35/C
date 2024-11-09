@@ -113,20 +113,36 @@ ll pow(ll base, ll exponent, ll modulus)
     return result;
 }
 
-#ifndef ONLINE_JUDGE
-#define DEBUG(x)         \
-    cout << #x << " = "; \
-    print_debug(x);      \
-    cout << endl;
-#else
-#define DEBUG(x)
-#endif
+// Print function without newline
+template <typename T>
+void prints_helper(const T &t)
+{
+    cout << t;
+}
+
+template <typename T, typename... Args>
+void prints_helper(const T &t, const Args &...args)
+{
+    cout << t;
+    prints_helper(args...);
+}
+
+template <typename... Args>
+void prints(const Args &...args)
+{
+    prints_helper(args...);
+}
+
+// Print function with newline
 
 template <typename T>
-void print_debug(const T &t) { cout << t; }
+void print_helper(const T &t)
+{
+    cout << t << " ";
+}
 
 template <typename T>
-void print_debug(const vector<T> &v)
+void print_helper(const vector<T> &v)
 {
     cout << "[";
     for (auto it = v.begin(); it != v.end(); ++it)
@@ -139,7 +155,7 @@ void print_debug(const vector<T> &v)
 }
 
 template <typename T>
-void print_debug(const set<T> &s)
+void print_helper(const set<T> &s)
 {
     cout << "{";
     for (auto it = s.begin(); it != s.end(); ++it)
@@ -152,7 +168,7 @@ void print_debug(const set<T> &s)
 }
 
 template <typename T>
-void print_debug(const unordered_set<T, custom_hash> &us)
+void print_helper(const unordered_set<T, custom_hash> &us)
 {
     cout << "{";
     for (auto it = us.begin(); it != us.end(); ++it)
@@ -165,7 +181,7 @@ void print_debug(const unordered_set<T, custom_hash> &us)
 }
 
 template <typename K, typename V>
-void print_debug(const map<K, V> &m)
+void print_helper(const map<K, V> &m)
 {
     cout << "{";
     for (auto it = m.begin(); it != m.end(); ++it)
@@ -178,7 +194,7 @@ void print_debug(const map<K, V> &m)
 }
 
 template <typename K, typename V>
-void print_debug(const unordered_map<K, V, custom_hash> &um)
+void print_helper(const unordered_map<K, V, custom_hash> &um)
 {
     cout << "{";
     for (auto it = um.begin(); it != um.end(); ++it)
@@ -190,6 +206,26 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cout << "}";
 }
 
+template <typename T, typename... Args>
+void print_helper(const T &t, const Args &...args)
+{
+    print_helper(t);
+    print_helper(args...);
+}
+
+template <typename... Args>
+void print(const Args &...args)
+{
+    print_helper(args...);
+    cout << endl;
+}
+
+bool isBetter(const vector<int> &x, const vector<int> &y)
+{
+    return (x[0] >= y[0] && x[1] >= y[1] && x[2] >= y[2]) &&
+           (x[0] > y[0] || x[1] > y[1] || x[2] > y[2]);
+}
+
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -199,28 +235,22 @@ int main()
     cin >> t;
     while (t--)
     {
-        ll n;
-        cin >> n;
-        vll a(n);
-        forn(i, n) cin >> a[i];
-        ll ans = 0;
-        forn(i, n)
+        vector<vector<int>> team(3, vector<int>(3));
+        for (int i = 0; i < 3; ++i)
         {
-            forsn(j, i, n)
-            {
-                ll sum = 0;
-                forsn(k, i, j + 1)
-                {
-                    sum += a[k];
-                }
-                ll sq = sqrt(sum);
-                if (sq * sq == sum)
-                {
-                    ans++;
-                }
-            }
+            cin >> team[i][0] >> team[i][1] >> team[i][2];
         }
-        cout << ans << endl;
+        bool found = false;
+        sort(team.begin(), team.end());
+        do
+        {
+            if (isBetter(team[0], team[1]) && isBetter(team[1], team[2]))
+            {
+                found = true;
+                break;
+            }
+        } while (next_permutation(team.begin(), team.end()));
+        cout << (found ? "yes" : "no") << endl;
     }
     return 0;
 }

@@ -113,33 +113,49 @@ ll pow(ll base, ll exponent, ll modulus)
     return result;
 }
 
-#ifndef ONLINE_JUDGE
-#define DEBUG(x)         \
-    cout << #x << " = "; \
-    print_debug(x);      \
-    cout << endl;
-#else
-#define DEBUG(x)
-#endif
-
+// Print function without newline
 template <typename T>
-void print_debug(const T &t) { cout << t; }
-
-template <typename T>
-void print_debug(const vector<T> &v)
+void prints_helper(const T &t)
 {
-    cout << "[";
-    for (auto it = v.begin(); it != v.end(); ++it)
-    {
-        if (it != v.begin())
-            cout << ", ";
-        cout << *it;
-    }
-    cout << "]";
+    cout << t;
+}
+
+template <typename T, typename... Args>
+void prints_helper(const T &t, const Args &...args)
+{
+    cout << t;
+    prints_helper(args...);
+}
+
+template <typename... Args>
+void prints(const Args &...args)
+{
+    prints_helper(args...);
+}
+
+// Print function with newline
+
+template <typename T>
+void print_helper(const T &t)
+{
+    cout << t << " ";
 }
 
 template <typename T>
-void print_debug(const set<T> &s)
+void print_helper(const vector<T> &v)
+{
+    // cout << "[";
+    for (auto it = v.begin(); it != v.end(); ++it)
+    {
+        if (it != v.begin())
+            cout << " ";
+        cout << *it;
+    }
+    // cout << "]";
+}
+
+template <typename T>
+void print_helper(const set<T> &s)
 {
     cout << "{";
     for (auto it = s.begin(); it != s.end(); ++it)
@@ -152,7 +168,7 @@ void print_debug(const set<T> &s)
 }
 
 template <typename T>
-void print_debug(const unordered_set<T, custom_hash> &us)
+void print_helper(const unordered_set<T, custom_hash> &us)
 {
     cout << "{";
     for (auto it = us.begin(); it != us.end(); ++it)
@@ -165,7 +181,7 @@ void print_debug(const unordered_set<T, custom_hash> &us)
 }
 
 template <typename K, typename V>
-void print_debug(const map<K, V> &m)
+void print_helper(const map<K, V> &m)
 {
     cout << "{";
     for (auto it = m.begin(); it != m.end(); ++it)
@@ -178,7 +194,7 @@ void print_debug(const map<K, V> &m)
 }
 
 template <typename K, typename V>
-void print_debug(const unordered_map<K, V, custom_hash> &um)
+void print_helper(const unordered_map<K, V, custom_hash> &um)
 {
     cout << "{";
     for (auto it = um.begin(); it != um.end(); ++it)
@@ -188,6 +204,51 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
         cout << it->first << ": " << it->second;
     }
     cout << "}";
+}
+
+template <typename T, typename... Args>
+void print_helper(const T &t, const Args &...args)
+{
+    print_helper(t);
+    print_helper(args...);
+}
+
+template <typename... Args>
+void print(const Args &...args)
+{
+    print_helper(args...);
+    cout << endl;
+}
+
+void makeArray(vll &arr, ll p, ll n)
+{
+    if (n == 6)
+    {
+        arr.pb(1);
+        arr.pb(2);
+        arr.pb(4);
+        arr.pb(6);
+        arr.pb(5);
+        arr.pb(3);
+        return;
+    }
+    arr.pb(2);
+    for (int i = p + 1; i <= n; i++)
+    {
+        // print("Hello");
+        arr.pb(i);
+    }
+    for (int i = 4; i < p - 2; i++)
+    {
+        arr.pb(i);
+    }
+    // print(arr);
+    arr.pb(1);
+    arr.pb(3);
+    arr.pb(p - 2);
+    arr.pb(p - 1);
+    arr.pb(p);
+    return;
 }
 
 int main()
@@ -201,26 +262,54 @@ int main()
     {
         ll n;
         cin >> n;
-        vll a(n);
-        forn(i, n) cin >> a[i];
-        ll ans = 0;
-        forn(i, n)
+        if (n == 5)
         {
-            forsn(j, i, n)
+            print(5);
+            vll arr = {2, 1, 3, 4, 5};
+            print(arr);
+            continue;
+        }
+        if (n == 6)
+        {
+            print(7);
+            vll arr = {1, 2, 4, 6, 5, 3};
+            print(arr);
+            continue;
+        }
+        ll lastSet = -1;
+        for (int i = 0; i < 32; i++)
+        {
+            if ((1 << i) & n)
             {
-                ll sum = 0;
-                forsn(k, i, j + 1)
-                {
-                    sum += a[k];
-                }
-                ll sq = sqrt(sum);
-                if (sq * sq == sum)
-                {
-                    ans++;
-                }
+                lastSet = i;
             }
         }
-        cout << ans << endl;
+        // print(lastSet);
+        vll arr;
+        ll p = 1 << lastSet;
+        // print(p);
+        ll ans = 0;
+        if (n % 2)
+        {
+            ans = n;
+            makeArray(arr, p, n - 1);
+            arr.pb(n);
+            print(ans);
+            print(arr);
+        }
+        else
+        {
+            // print("Check");
+
+            for (int i = lastSet; i >= 0; i--)
+            {
+                ans += 1 << i;
+            }
+            // print(ans);
+            makeArray(arr, p, n);
+            print(ans);
+            print(arr);
+        }
     }
     return 0;
 }

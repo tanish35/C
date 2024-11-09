@@ -114,80 +114,108 @@ ll pow(ll base, ll exponent, ll modulus)
 }
 
 #ifndef ONLINE_JUDGE
-#define DEBUG(x)         \
-    cout << #x << " = "; \
+#define dbg(x)           \
+    cerr << #x << " = "; \
     print_debug(x);      \
-    cout << endl;
+    cerr << endl;
 #else
-#define DEBUG(x)
+#define dbg(x)
 #endif
 
+// Forward declaration of print_debug for generic types
 template <typename T>
-void print_debug(const T &t) { cout << t; }
+void print_debug(const T &t);
 
+// Overload for pair
+template <typename T1, typename T2>
+void print_debug(const pair<T1, T2> &p)
+{
+    cerr << "(";
+    print_debug(p.first);
+    cerr << ", ";
+    print_debug(p.second);
+    cerr << ")";
+}
+
+// Overload for generic types
+template <typename T>
+void print_debug(const T &t)
+{
+    cerr << t;
+}
+
+// Overload for vector
 template <typename T>
 void print_debug(const vector<T> &v)
 {
-    cout << "[";
+    cerr << "[";
     for (auto it = v.begin(); it != v.end(); ++it)
     {
         if (it != v.begin())
-            cout << ", ";
-        cout << *it;
+            cerr << ", ";
+        print_debug(*it);
     }
-    cout << "]";
+    cerr << "]";
 }
 
+// Overload for set
 template <typename T>
 void print_debug(const set<T> &s)
 {
-    cout << "{";
+    cerr << "{";
     for (auto it = s.begin(); it != s.end(); ++it)
     {
         if (it != s.begin())
-            cout << ", ";
-        cout << *it;
+            cerr << ", ";
+        print_debug(*it);
     }
-    cout << "}";
+    cerr << "}";
 }
 
+// Overload for unordered_set
 template <typename T>
 void print_debug(const unordered_set<T, custom_hash> &us)
 {
-    cout << "{";
+    cerr << "{";
     for (auto it = us.begin(); it != us.end(); ++it)
     {
         if (it != us.begin())
-            cout << ", ";
-        cout << *it;
+            cerr << ", ";
+        print_debug(*it);
     }
-    cout << "}";
+    cerr << "}";
 }
 
+// Overload for map
 template <typename K, typename V>
 void print_debug(const map<K, V> &m)
 {
-    cout << "{";
+    cerr << "{";
     for (auto it = m.begin(); it != m.end(); ++it)
     {
         if (it != m.begin())
-            cout << ", ";
-        cout << it->first << ": " << it->second;
+            cerr << ", ";
+        print_debug(it->first);
+        cerr << ": ";
+        print_debug(it->second);
     }
-    cout << "}";
+    cerr << "}";
 }
 
+// Overload for unordered_map
 template <typename K, typename V>
 void print_debug(const unordered_map<K, V, custom_hash> &um)
 {
-    cout << "{";
+    cerr << "{";
     for (auto it = um.begin(); it != um.end(); ++it)
     {
         if (it != um.begin())
-            cout << ", ";
-        cout << it->first << ": " << it->second;
+            cerr << ", ";
+        print_debug(it->first);
+        cerr << ": ";
+        print_debug(it->second);
     }
-    cout << "}";
+    cerr << "}";
 }
 
 int main()
@@ -195,32 +223,47 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
+
     int t;
     cin >> t;
     while (t--)
     {
-        ll n;
-        cin >> n;
-        vll a(n);
-        forn(i, n) cin >> a[i];
-        ll ans = 0;
+        string s;
+        cin >> s;
+        ll n = s.length();
+        vpll rangeVec;
         forn(i, n)
         {
-            forsn(j, i, n)
+            if (s[i] != '.')
             {
-                ll sum = 0;
-                forsn(k, i, j + 1)
-                {
-                    sum += a[k];
-                }
-                ll sq = sqrt(sum);
-                if (sq * sq == sum)
-                {
-                    ans++;
-                }
+                ll range = s[i] - '0';
+                ll left = max(0LL, i - range);
+                ll right = min(n - 1, i + range);
+                rangeVec.pb({left, right});
             }
         }
-        cout << ans << endl;
+        sorta(rangeVec);
+        dbg(rangeVec);
+
+        ll prev = -1;
+        int pos = 1;
+        for (auto range : rangeVec)
+        {
+            if (range.first <= prev)
+            {
+                pos = 0;
+                break;
+            }
+            prev = range.second;
+        }
+        if (pos)
+        {
+            cout << "safe" << endl;
+        }
+        else
+        {
+            cout << "unsafe" << endl;
+        }
     }
     return 0;
 }
