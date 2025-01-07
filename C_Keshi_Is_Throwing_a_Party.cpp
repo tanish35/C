@@ -218,33 +218,54 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
+int count(vpll a, ll mid)
+{
+    int c = 0;
+    for (auto i : a)
+    {
+        if (i.first >= mid - c - 1 && i.second >= c)
+        {
+            c++;
+        }
+    }
+    return c;
+}
+
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
+
     int t;
     cin >> t;
     while (t--)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
+        ll n;
+        cin >> n;
+        vpll a(n);
+        forn(i, n)
         {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
+            cin >> a[i].first >> a[i].second;
+        }
+
+        ll l = 0, r = n, ans = 0;
+        while (l <= r)
+        {
+            ll mid = l + (r - l) / 2;
+            dbg(count(a, mid));
+            if (count(a, mid) >= mid)
             {
+                ans = mid;
                 l = mid + 1;
             }
             else
             {
-                h = mid;
+                r = mid - 1;
             }
         }
-        cout << "!" << " " << l << endl;
+
+        cout << ans << endl;
     }
     return 0;
 }

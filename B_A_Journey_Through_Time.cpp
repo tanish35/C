@@ -217,34 +217,42 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     }
     cerr << "}";
 }
-
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+
+    ll n, k;
+    cin >> n >> k;
+
+    vpll v(n);
+    for (ll i = 0; i < n; i++)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
-        {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
-            {
-                l = mid + 1;
-            }
-            else
-            {
-                h = mid;
-            }
-        }
-        cout << "!" << " " << l << endl;
+        cin >> v[i].first >> v[i].second;
     }
+    sorta(v);
+
+    ll max1 = 0;
+    set<pair<ll, ll>> st;
+
+    for (ll i = 0; i < n; i++)
+    {
+        ll to1 = v[i].first, so1 = v[i].second;
+        while (!st.empty() && abs(to1 - st.begin()->second) > k)
+        {
+            st.erase(st.begin());
+        }
+        if (!st.empty())
+        {
+            auto it = prev(st.end());
+            ll so2 = it->first, to2 = it->second;
+            max1 = max(max1, so1 + so2 + abs(to1 - to2));
+        }
+        st.insert({so1, to1});
+    }
+
+    cout << max1 << endl;
+
     return 0;
 }

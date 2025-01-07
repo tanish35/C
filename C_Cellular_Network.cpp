@@ -223,28 +223,67 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+    ll n, m;
+    cin >> n >> m;
+    vll a(n), b(m);
+    ll first = 0;
+    ll last = 0;
+    forn(i, n)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
+        cin >> a[i];
+        if (i == 0)
+            first = a[i];
+        if (i == n - 1)
+            last = a[i];
+    }
+    ll l = 0;
+    ll r = 1e9;
+    forn(i, m)
+    {
+        cin >> b[i];
+        if (i == 0)
+            r = max(r, abs(b[i] - first));
+        else if (i == m - 1)
+            r = max(r, abs(b[i] - last));
+        else
+            r = max(r, abs(b[i] - b[i - 1]));
+    }
+    ll ans = 0;
+    while (l <= r)
+    {
+        ll mid = l + (r - l) / 2;
+        ll count = 0;
+        ll j = 0;
+        dbg(mid);
+        forn(i, n)
         {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
+            if (abs(a[i] - b[j]) <= mid)
             {
-                l = mid + 1;
+                count++;
+            }
+            else if (j > m - 1)
+            {
+                break;
             }
             else
             {
-                h = mid;
+                j++;
+                i--;
             }
         }
-        cout << "!" << " " << l << endl;
+        dbg(count);
+        if (count >= n)
+        {
+            ans = mid;
+            r = mid - 1;
+        }
+        else
+        {
+            l = mid + 1;
+        }
+        dbg(l);
+        dbg(r);
     }
+    cout << ans << endl;
     return 0;
 }

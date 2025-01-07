@@ -1,0 +1,1 @@
+{"name":"Local: ArrayDivision","url":"/Users/tanish/Desktop/C/ArrayDivision.cpp","tests":[{"id":1734973236492,"input":"5 3\n2 4 7 3 5","output":"8"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/tanish/Desktop/C/ArrayDivision.cpp","group":"local","local":true}

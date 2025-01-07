@@ -223,28 +223,56 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+
+    ll n, m, cl, ce, v;
+    cin >> n >> m >> cl >> ce >> v;
+    vll l(cl), e(ce);
+    forn(i, cl)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
-        {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
-            {
-                l = mid + 1;
-            }
-            else
-            {
-                h = mid;
-            }
-        }
-        cout << "!" << " " << l << endl;
+        cin >> l[i];
     }
+    forn(i, ce)
+    {
+        cin >> e[i];
+    }
+    ll q;
+    cin >> q;
+    forn(i, q)
+    {
+        ll x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        if (x1 == x2)
+        {
+            cout << abs(y1 - y2) << endl;
+            continue;
+        }
+        ll elevator_time = INT_MAX, stair_time = INT_MAX;
+        if (cl != 0)
+        {
+            ll stair_time1 = 0, stair_time2 = 0;
+            ll stair = upper_bound(l.begin(), l.end(), y1) - l.begin();
+            stair_time1 += abs(y1 - l[stair - 1]);
+            stair_time1 += abs(y2 - l[stair - 1]);
+            stair_time1 += abs(x1 - x2);
+            stair_time2 += abs(y1 - l[stair]);
+            stair_time2 += abs(y2 - l[stair]);
+            stair_time2 += abs(x1 - x2);
+            stair_time = min(stair_time1, stair_time2);
+        }
+        if (ce != 0)
+        {
+            ll elevator_time1 = 0, elevator_time2 = 0;
+            ll elevator = upper_bound(e.begin(), e.end(), y1) - e.begin();
+            elevator_time1 += abs(y1 - e[elevator - 1]);
+            elevator_time1 += abs(y2 - e[elevator - 1]);
+            elevator_time1 += (abs(x1 - x2) + v - 1) / v;
+            elevator_time2 += abs(y1 - e[elevator]);
+            elevator_time2 += abs(y2 - e[elevator]);
+            elevator_time2 += (abs(x1 - x2) + v - 1) / v;
+            elevator_time = min(elevator_time1, elevator_time2);
+        }
+        cout << min(stair_time, elevator_time) << endl;
+    }
+
     return 0;
 }

@@ -223,28 +223,40 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+    ll n, s;
+    cin >> n >> s;
+    vll a(n + 1);
+    for (ll i = 1; i <= n; i++)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
-        {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
-            {
-                l = mid + 1;
-            }
-            else
-            {
-                h = mid;
-            }
-        }
-        cout << "!" << " " << l << endl;
+        cin >> a[i];
     }
+    ll l = 1, r = n, ans = 0;
+    ll sum_ans = 0;
+    while (l <= r)
+    {
+        ll mid = (l + r) / 2;
+        vll b(n + 1);
+        for (ll i = 1; i <= n; i++)
+        {
+            b[i] = a[i] + i * mid;
+        }
+        sort(b.begin(), b.end());
+        ll sum = 0;
+        for (ll i = 1; i <= mid; i++)
+        {
+            sum += b[i];
+        }
+        if (sum <= s)
+        {
+            ans = mid;
+            sum_ans = sum;
+            l = mid + 1;
+        }
+        else
+        {
+            r = mid - 1;
+        }
+    }
+    cout << ans << " " << sum_ans << endl;
     return 0;
 }

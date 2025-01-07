@@ -243,7 +243,6 @@ int main()
             }
         }
         sorta(rangeVec);
-        dbg(rangeVec);
 
         ll prev = -1;
         int pos = 1;

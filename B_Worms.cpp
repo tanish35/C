@@ -223,28 +223,24 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+    ll n;
+    cin >> n;
+    vll a(n);
+    vll prefix(n + 1);
+    prefix[0] = 0;
+    forn(i, n)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
-        {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
-            {
-                l = mid + 1;
-            }
-            else
-            {
-                h = mid;
-            }
-        }
-        cout << "!" << " " << l << endl;
+        cin >> a[i];
+        prefix[i + 1] = prefix[i] + a[i];
+    }
+    ll m;
+    cin >> m;
+    vll b(m);
+    forn(i, m)
+    {
+        cin >> b[i];
+        int ans = lower_bound(prefix.begin(), prefix.end(), b[i]) - prefix.begin();
+        cout << ans << endl;
     }
     return 0;
 }

@@ -227,24 +227,10 @@ int main()
     cin >> t;
     while (t--)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
-        {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
-            {
-                l = mid + 1;
-            }
-            else
-            {
-                h = mid;
-            }
-        }
-        cout << "!" << " " << l << endl;
+        ll n;
+        cin >> n;
+        ll a = sqrt(2 * n - 1);
+        cout << (a - 1) / 2 << endl;
     }
     return 0;
 }

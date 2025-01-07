@@ -218,6 +218,50 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
+int possible(ll n, ll x, ll a, ll y, ll b, ll k, vll &p, ll mid)
+{
+    dbg(p);
+    ll lcm = (a * b) / gcd(a, b);
+    ll donation = 0;
+    ll a_count = mid / a;
+    ll b_count = mid / b;
+    ll ab_count = mid / lcm;
+    // dbg(a_count);
+    // dbg(b_count);
+    // dbg(ab_count);
+    a_count -= ab_count;
+    b_count -= ab_count;
+    ll j = 1;
+    dbg(mid);
+    ll l = j;
+    forsn(i, j, ab_count + 1)
+    {
+        donation += (p[i] * (x + y)) / 100;
+        l++;
+    }
+    j = l;
+    dbg(donation);
+    forsn(i, j, j + b_count)
+    {
+        // dbg(i);
+        // dbg(p[i]);
+        // dbg(y);
+        donation += (p[i] * y) / 100;
+        l++;
+    }
+    j = l;
+    dbg(donation);
+    forsn(i, j, a_count + j)
+    {
+        dbg(i);
+        dbg(p[i]);
+        dbg(y);
+        donation += (p[i] * x) / 100;
+    }
+    dbg(donation);
+    return donation >= k;
+}
+
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -227,24 +271,43 @@ int main()
     cin >> t;
     while (t--)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
+        ll n;
+        cin >> n;
+        vll p(n + 1);
+        for (int i = 1; i <= n; i++)
         {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
+            cin >> p[i];
+        }
+        sortd(p);
+        p.pop_back();
+        p.insert(p.begin(), 0);
+        ll x, a;
+        cin >> x >> a;
+        ll y, b;
+        cin >> y >> b;
+        if (x > y)
+        {
+            swap(x, y);
+            swap(a, b);
+        }
+        ll k;
+        cin >> k;
+        ll ans = -1;
+        ll l = 1, r = n;
+        while (l <= r)
+        {
+            ll mid = l + (r - l) / 2;
+            if (possible(n, x, a, y, b, k, p, mid))
             {
-                l = mid + 1;
+                ans = mid;
+                r = mid - 1;
             }
             else
             {
-                h = mid;
+                l = mid + 1;
             }
         }
-        cout << "!" << " " << l << endl;
+        cout << ans << endl;
     }
     return 0;
 }

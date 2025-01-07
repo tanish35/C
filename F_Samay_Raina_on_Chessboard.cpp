@@ -218,33 +218,66 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
-int main()
+int isCorner(int i, int j)
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+    if ((i == 1 && j == 1) || (i == 1 && j == 8) || (i == 8 && j == 1) || (i == 8 && j == 8))
+        return 1;
+    else
+        return 0;
+}
+int isEdge(int i, int j)
+{
+    if (i == 1 || i == 8 || j == 1 || j == 8)
+        return 1;
+    else
+        return 0;
+}
+void solve()
+{
+    ll q;
+    cin >> q;
+    int delx[4] = {-1, 0, 1, 0};
+    int dely[4] = {0, 1, 0, -1};
+    int board[10][10];
+    for (int i = 0; i < 10; i++)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
-        {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
-            {
-                l = mid + 1;
-            }
-            else
-            {
-                h = mid;
-            }
-        }
-        cout << "!" << " " << l << endl;
+        for (int j = 0; j < 10; j++)
+            board[i][j] = 0;
     }
-    return 0;
+    for (int i = 1; i <= 8; i++)
+    {
+        for (int j = 1; j <= 8; j++)
+        {
+            if (isCorner(i, j))
+                board[i][j] = 2;
+            else if (isEdge(i, j))
+                board[i][j] = 3;
+            else
+                board[i][j] = 4;
+        }
+    }
+    long double res = 0;
+    for (int i = 1; i <= 8; i++)
+    {
+        for (int j = 1; j <= 8; j++)
+        {
+            long double num = 1.0, den = 1.0;
+            for (int k = 0; k < 4; k++)
+            {
+                int x = i + delx[k];
+                int y = j + dely[k];
+                if (board[x][y] != 0)
+                {
+                    num *= (board[x][y] - 1) * 1.0;
+                    den *= board[x][y] * 1.0;
+                }
+            }
+            res += num / (den * 1.0);
+        }
+    }
+    cout << fixed << setprecision(6) << res << '\n';
+}
+int32_t main()
+{
+    solve();
 }

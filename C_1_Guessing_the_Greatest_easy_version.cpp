@@ -218,6 +218,22 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
+bool check_left(ll l, ll x)
+{
+    cout << "? " << l << " " << x << endl;
+    ll y;
+    cin >> y;
+    return y == x;
+}
+
+bool check_right(ll x, ll r)
+{
+    cout << "? " << x << " " << r << endl;
+    ll y;
+    cin >> y;
+    return y == x;
+}
+
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -227,24 +243,43 @@ int main()
     cin >> t;
     while (t--)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
+        ll n;
+        cin >> n;
+        cout << "? 1 " << n << endl;
+        ll x;
+        cin >> x;
+        ll l = 1, r = n;
+        while (l < r)
         {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
+            ll mid = l + (r - l) / 2;
+            if (x <= mid)
             {
-                l = mid + 1;
+                if (check_left(l, x))
+                {
+                    r = mid;
+                }
+                else
+                {
+                    l = mid + 1;
+                    cout << "? " << l << " " << r << endl;
+                    cin >> x;
+                }
             }
             else
             {
-                h = mid;
+                if (check_right(x, r))
+                {
+                    l = mid + 1;
+                }
+                else
+                {
+                    r = mid;
+                    cout << "? " << l << " " << r << endl;
+                    cin >> x;
+                }
             }
         }
-        cout << "!" << " " << l << endl;
+        cout << "! " << l << endl;
     }
     return 0;
 }

@@ -218,33 +218,41 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
+vll primeNumbers = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 49};
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+
+    ll n = primeNumbers.size();
+    ll count = 0;
+    string s;
+
+    forn(i, n)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
+        cout << primeNumbers[i] << endl;
+        cin >> s;
+        if (s == "yes")
         {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
+            count++;
+            if (primeNumbers[i] < 10)
             {
-                l = mid + 1;
-            }
-            else
-            {
-                h = mid;
+                cout << primeNumbers[i] * primeNumbers[i] << endl;
+                cin >> s;
+                if (s == "yes")
+                {
+                    cout << "composite" << endl;
+                    return 0;
+                }
             }
         }
-        cout << "!" << " " << l << endl;
+        if (count >= 2)
+        {
+            cout << "composite" << endl;
+            return 0;
+        }
     }
+    cout << "prime" << endl;
     return 0;
 }

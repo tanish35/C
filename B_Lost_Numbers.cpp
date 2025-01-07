@@ -218,33 +218,90 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
+vll num = {4, 8, 15, 16, 23, 42};
+uset s = {4, 8, 15, 16, 23, 42};
+map<ll, pair<ll, ll>> m;
+
+void fill_factors()
+{
+    do
+    {
+        for (int i = 0; i < num.size(); ++i)
+        {
+            for (int j = i + 1; j < num.size(); ++j)
+            {
+                ll product = num[i] * num[j];
+                if (m.find(product) == m.end())
+                {
+                    m[product] = {num[i], num[j]};
+                }
+            }
+        }
+    } while (next_permutation(num.begin(), num.end()));
+}
+
+int check_common(ll x_prev, ll y_prev, ll x_curr, ll y_curr)
+{
+    if (x_prev == x_curr)
+    {
+        return x_prev;
+    }
+    if (x_prev == y_curr)
+    {
+        return x_prev;
+    }
+    if (y_prev == x_curr)
+    {
+        return y_prev;
+    }
+    if (y_prev == y_curr)
+    {
+        return y_prev;
+    }
+    return 0;
+}
+
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+    fill_factors();
+    vll a(4);
+    cout << "? 1 2" << endl;
+    cin >> a[0];
+    cout << "? 2 3" << endl;
+    cin >> a[1];
+    cout << "? 3 4" << endl;
+    cin >> a[2];
+    cout << "? 4 5" << endl;
+    cin >> a[3];
+    uset curr;
+
+    ll x_prev = m[a[0]].first;
+    ll y_prev = m[a[0]].second;
+    curr.insert(x_prev);
+    curr.insert(y_prev);
+    ll x_curr = m[a[1]].first;
+    ll y_curr = m[a[1]].second;
+    ll x = check_common(x_prev, y_prev, x_curr, y_curr);
+    cout << "! ";
+    cout << a[0] / x << " " << x << " ";
+    forsn(i, 1, 4)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
-        {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
-            {
-                l = mid + 1;
-            }
-            else
-            {
-                h = mid;
-            }
-        }
-        cout << "!" << " " << l << endl;
+        x = a[i] / x;
+        curr.insert(x);
+        cout << x << " ";
     }
+    for (auto i : s)
+    {
+        if (curr.find(i) == curr.end())
+        {
+            cout << i;
+            break;
+        }
+    }
+    cout << endl;
+
     return 0;
 }

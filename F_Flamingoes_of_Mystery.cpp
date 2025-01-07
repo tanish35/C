@@ -223,28 +223,23 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+    ll n;
+    cin >> n;
+    vll in(n);
+    for (ll i = 1; i < n; i++)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
-        {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
-            {
-                l = mid + 1;
-            }
-            else
-            {
-                h = mid;
-            }
-        }
-        cout << "!" << " " << l << endl;
+        cout << "? " << i << " " << i + 1 << endl;
+        cin >> in[i];
+    }
+    cout << "? " << 1 << " " << 3 << endl;
+    ll x;
+    cin >> x;
+    ll ans = x - in[2];
+    cout << "! " << ans << " ";
+    forn(i, n - 1)
+    {
+        ans = in[i + 1] - ans;
+        cout << ans << " ";
     }
     return 0;
 }

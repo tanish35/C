@@ -218,33 +218,51 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
+ll check(vll &a, ll mid, ll n, ll k)
+{
+    forn(i, n)
+    {
+        ll temp = mid / a[i];
+        k -= temp;
+    }
+    // dbg(k);
+    // dbg(mid);
+    if (k > 0)
+    {
+        return 0;
+    }
+    return 1;
+}
+
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+    ll n, k;
+    cin >> n >> k;
+    vll a(n);
+    forn(i, n)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
-        {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
-            {
-                l = mid + 1;
-            }
-            else
-            {
-                h = mid;
-            }
-        }
-        cout << "!" << " " << l << endl;
+        cin >> a[i];
     }
+    sorta(a);
+    ll l = a[0];
+    ll r = a[0] * k;
+    ll ans = l;
+    while (l <= r)
+    {
+        ll mid = l + (r - l) / 2;
+        if (check(a, mid, n, k))
+        {
+            ans = mid;
+            r = mid - 1;
+        }
+        else
+        {
+            l = mid + 1;
+        }
+    }
+    cout << ans << endl;
     return 0;
 }

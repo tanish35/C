@@ -227,24 +227,47 @@ int main()
     cin >> t;
     while (t--)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
+        ll n, x, y;
+        cin >> n >> x >> y;
+        vll a(n + 1, -1);
+        a[x] = 0;
+        a[y] = 1;
+        ll curr = 1;
+        for (int i = x + 1; i < y; i++)
         {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
+            a[i] = curr;
+            curr = 1 - curr;
+        }
+        ll diff = (x - 1) + (n - y);
+        dbg(a);
+        curr = 0;
+        for (int i = y + 1; i <= y + diff; i++)
+        {
+            if (i == n)
             {
-                l = mid + 1;
+                a[i] = curr;
             }
-            else
+            a[i % n] = curr;
+            curr = 1 - curr;
+        }
+        dbg(a);
+        for (int i = 1; i < n; i++)
+        {
+            if (a[i] == a[i + 1])
             {
-                h = mid;
+                a[i] = 2;
             }
         }
-        cout << "!" << " " << l << endl;
+        if (a[n] == a[1])
+        {
+            a[n] = 2;
+        }
+        for (int i = 1; i <= n; i++)
+        {
+            cout << a[i] << " ";
+        }
+
+        cout << endl;
     }
     return 0;
 }

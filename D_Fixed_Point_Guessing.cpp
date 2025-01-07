@@ -218,6 +218,36 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
+vll ask(ll l, ll mid)
+{
+    cout << "? " << l << " " << mid << endl;
+    vll ans(mid - l + 1);
+    forn(i, mid - l + 1)
+    {
+        cin >> ans[i];
+    }
+    return ans;
+}
+
+bool check(ll l, ll mid)
+{
+    vll ans = ask(l, mid);
+    int count = 0;
+    forn(i, mid - l + 1)
+    {
+        if (ans[i] >= l && ans[i] <= mid)
+        {
+            count++;
+        }
+    }
+    return count % 2;
+}
+
+void ans(ll l)
+{
+    cout << "! " << l << endl;
+}
+
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -227,24 +257,22 @@ int main()
     cin >> t;
     while (t--)
     {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
+        ll n;
+        cin >> n;
+        ll l = 1, r = n;
+        while (l < r)
         {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
+            ll mid = l + (r - l) / 2;
+            if (check(l, mid))
             {
-                l = mid + 1;
+                r = mid;
             }
             else
             {
-                h = mid;
+                l = mid + 1;
             }
         }
-        cout << "!" << " " << l << endl;
+        ans(l);
     }
     return 0;
 }

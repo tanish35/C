@@ -15,15 +15,13 @@ using namespace std;
 #define sorta(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
 #define vpll vector<pair<ll, ll>>
-#define forn(i, e) for (ll i = 0; i < e; i++)
-#define forsn(i, s, e) for (ll i = s; i < e; i++)
-#define rforn(i, s) for (ll i = s; i >= 0; i--)
-#define rforsn(i, s, e) for (ll i = s; i >= e; i--)
+#define forn(i,e) for(ll i = 0; i < e; i++)
+#define forsn(i,s,e) for(ll i = s; i < e; i++)
+#define rforn(i,s) for(ll i = s; i >= 0; i--)
+#define rforsn(i,s,e) for(ll i = s; i >= e; i--)
 #define pq priority_queue<ll>
-struct custom_hash
-{
-    static uint64_t splitmix64(uint64_t x)
-    {
+struct custom_hash {
+    static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c
         x += 0x9e3779b97f4a7c15;
         x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
@@ -31,14 +29,13 @@ struct custom_hash
         return x ^ (x >> 31);
     }
 
-    size_t operator()(uint64_t x) const
-    {
+    size_t operator()(uint64_t x) const {
         static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
         return splitmix64(x + FIXED_RANDOM);
     }
 };
 #define umap unordered_map<ll, ll, custom_hash>
-#define uset unordered_set<ll, custom_hash>
+#define uset unordered_set<ll,custom_hash>
 
 /*
 
@@ -97,14 +94,11 @@ struct custom_hash
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⣛⡉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 
 */
-ll pow(ll base, ll exponent, ll modulus)
-{
+ll pow(ll base, ll exponent, ll modulus) {
     ll result = 1;
     base = base % modulus;
-    while (exponent > 0)
-    {
-        if (exponent % 2 == 1)
-        {
+    while (exponent > 0) {
+        if (exponent % 2 == 1) {
             result = (result * base) % modulus;
         }
         exponent = exponent >> 1;
@@ -114,7 +108,7 @@ ll pow(ll base, ll exponent, ll modulus)
 }
 
 #ifndef ONLINE_JUDGE
-#define dbg(x)           \
+#define dbg(x)         \
     cerr << #x << " = "; \
     print_debug(x);      \
     cerr << endl;
@@ -218,33 +212,36 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
-int main()
-{
+int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
     int t;
     cin >> t;
-    while (t--)
-    {
-        ll l = 2;
-        ll h = 999;
-        while (l < h)
-        {
-            ll mid = (l + h) / 2;
-            cout << "?" << " " << mid << " " << mid << endl;
-            ll ans;
-            cin >> ans;
-            if (ans == mid * mid)
-            {
-                l = mid + 1;
-            }
-            else
-            {
-                h = mid;
-            }
+    while (t--) {
+        ll n;
+        cin >> n;
+        vll a(n);
+        vll b(n);
+        ll min_a=INT_MAX;
+        ll min_b=INT_MAX;
+        forn(i,n){
+            cin>>a[i];
+            min_a=min(min_a,a[i]);
         }
-        cout << "!" << " " << l << endl;
+        forn(i,n){
+            cin>>b[i];
+            min_b=min(min_b,b[i]);
+        }
+        ll ans1=0;
+        ll ans2=0;
+        forn(i,n){
+            ans1+=min_b+a[i];
+        }
+        forn(i,n){
+            ans2+=min_a+b[i];
+        }
+        cout<<min(ans1,ans2)<<endl;
     }
     return 0;
 }
