@@ -218,20 +218,12 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
-bool check_left(ll l, ll x)
+ll ask(ll l, ll r)
 {
-    cout << "? " << l << " " << x << endl;
-    ll y;
-    cin >> y;
-    return y == x;
-}
-
-bool check_right(ll x, ll r)
-{
-    cout << "? " << x << " " << r << endl;
-    ll y;
-    cin >> y;
-    return y == x;
+    cout << "? " << l << " " << r << endl;
+    ll x;
+    cin >> x;
+    return x;
 }
 
 int main()
@@ -239,47 +231,44 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+    ll n;
+    cin >> n;
+    ll l = 1, r = n;
+    while (l < r)
     {
-        ll n;
-        cin >> n;
-        cout << "? 1 " << n << endl;
-        ll x;
-        cin >> x;
-        ll l = 1, r = n;
-        while (l < r)
+        ll mid = l + (r - l) / 2;
+        ll x = ask(l, r);
+        if (r - l == 1)
         {
-            ll mid = l + (r - l) / 2;
-            if (x <= mid)
+            if (x == l)
+                l = r;
+            break;
+        }
+        if (r - l == 2)
+        {
+            if (x > mid)
             {
-                if (check_left(l, x))
-                {
-                    r = mid;
-                }
-                else
-                {
-                    l = mid + 1;
-                    cout << "? " << l << " " << r << endl;
-                    cin >> x;
-                }
-            }
-            else
-            {
-                if (check_right(x, r))
-                {
-                    l = mid + 1;
-                }
-                else
-                {
-                    r = mid;
-                    cout << "? " << l << " " << r << endl;
-                    cin >> x;
-                }
+                int t = ask(l, mid);
+                if (t == l)
+                    l = mid;
+                break;
             }
         }
-        cout << "! " << l << endl;
+        if (x <= mid)
+        {
+            if (ask(l, mid) == x)
+                r = mid;
+            else
+                l = mid + 1;
+        }
+        else
+        {
+            if (ask(mid + 1, r) == x)
+                l = mid + 1;
+            else
+                r = mid;
+        }
     }
+    cout << "! " << l << endl;
     return 0;
 }

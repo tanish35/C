@@ -172,20 +172,6 @@ void print_debug(const set<T> &s)
     cerr << "}";
 }
 
-// Overload for multiset
-template <typename T>
-void print_debug(const multiset<T> &ms)
-{
-    cerr << "{";
-    for (auto it = ms.begin(); it != ms.end(); ++it)
-    {
-        if (it != ms.begin())
-            cerr << ", ";
-        print_debug(*it);
-    }
-    cerr << "}";
-}
-
 // Overload for unordered_set
 template <typename T>
 void print_debug(const unordered_set<T, custom_hash> &us)
@@ -241,6 +227,53 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n;
+        cin >> n;
+        vll a(n);
+        ll sum = 0;
+        ll min1 = INT_MAX;
+        forn(i, n)
+        {
+            cin >> a[i];
+            sum += a[i];
+            min1 = min(min1, a[i]);
+        }
+        ll l = min1, r = ceil((double)sum / n);
+        ll ans = 0;
+        while (l <= r)
+        {
+            ll mid = l + (r - l) / 2;
+            vll curr = a;
+            bool flag = true;
+            for (int i = n - 1; i >= 2; i--)
+            {
+                if (curr[i] < mid)
+                {
+                    flag = false;
+                    break;
+                }
+                ll give = min(mid * 3, min(curr[i] - mid, a[i]));
+                give /= 3;
+                curr[i - 1] = curr[i - 1] + give;
+                curr[i - 2] = curr[i - 2] + 2 * give;
+                dbg(mid);
+                dbg(curr);
+            }
+            if (curr[0] < mid || curr[1] < mid)
+            {
+                flag = false;
+            }
+            if (flag)
+            {
+                ans = mid;
+                l = mid + 1;
+            }
+            else
+            {
+                r = mid - 1;
+            }
+        }
+        cout << ans << endl;
     }
     return 0;
 }

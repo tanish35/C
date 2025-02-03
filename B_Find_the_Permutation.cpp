@@ -172,20 +172,6 @@ void print_debug(const set<T> &s)
     cerr << "}";
 }
 
-// Overload for multiset
-template <typename T>
-void print_debug(const multiset<T> &ms)
-{
-    cerr << "{";
-    for (auto it = ms.begin(); it != ms.end(); ++it)
-    {
-        if (it != ms.begin())
-            cerr << ", ";
-        print_debug(*it);
-    }
-    cerr << "}";
-}
-
 // Overload for unordered_set
 template <typename T>
 void print_debug(const unordered_set<T, custom_hash> &us)
@@ -241,6 +227,34 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n;
+        cin >> n;
+        vll v(n);
+        for (int i = 1; i <= n; i++)
+        {
+            ll pos = 1;
+            for (int j = 1; j <= n; j++)
+            {
+                char c;
+                cin >> c;
+                if (j < i && c == '0')
+                {
+                    pos++;
+                }
+                else if (j > i && c == '1')
+                {
+                    pos++;
+                }
+                dbg(pos);
+            }
+            dbg(pos);
+            v[n - pos] = i;
+        }
+        for (int i = 0; i < n; i++)
+        {
+            cout << v[i] << " ";
+        }
+        cout << endl;
     }
     return 0;
 }

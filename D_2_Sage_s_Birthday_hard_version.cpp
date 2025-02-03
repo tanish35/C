@@ -172,20 +172,6 @@ void print_debug(const set<T> &s)
     cerr << "}";
 }
 
-// Overload for multiset
-template <typename T>
-void print_debug(const multiset<T> &ms)
-{
-    cerr << "{";
-    for (auto it = ms.begin(); it != ms.end(); ++it)
-    {
-        if (it != ms.begin())
-            cerr << ", ";
-        print_debug(*it);
-    }
-    cerr << "}";
-}
-
 // Overload for unordered_set
 template <typename T>
 void print_debug(const unordered_set<T, custom_hash> &us)
@@ -237,10 +223,39 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    int t;
-    cin >> t;
-    while (t--)
+    ll n;
+    cin >> n;
+    vll a(n + 1);
+    ll max1 = 0;
+    forsn(i, 1, n + 1)
     {
+        cin >> a[i];
+    }
+    sort(a.begin(), a.end());
+    vll b(n + 1, 0);
+    ll ans = 0;
+    ll k = 1;
+    for (ll i = 2; i <= n; i += 2)
+    {
+        b[i] = a[k];
+        k++;
+    }
+    for (ll i = 1; i <= n; i += 2)
+    {
+        b[i] = a[k];
+        k++;
+    }
+    for (ll i = 2; i < n; i += 2)
+    {
+        if (b[i] < b[i - 1] && b[i] < b[i + 1])
+        {
+            ans++;
+        }
+    }
+    cout << ans << endl;
+    forsn(i, 1, n + 1)
+    {
+        cout << b[i] << " ";
     }
     return 0;
 }

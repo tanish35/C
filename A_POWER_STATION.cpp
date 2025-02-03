@@ -172,20 +172,6 @@ void print_debug(const set<T> &s)
     cerr << "}";
 }
 
-// Overload for multiset
-template <typename T>
-void print_debug(const multiset<T> &ms)
-{
-    cerr << "{";
-    for (auto it = ms.begin(); it != ms.end(); ++it)
-    {
-        if (it != ms.begin())
-            cerr << ", ";
-        print_debug(*it);
-    }
-    cerr << "}";
-}
-
 // Overload for unordered_set
 template <typename T>
 void print_debug(const unordered_set<T, custom_hash> &us)
@@ -241,6 +227,76 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n, k;
+        cin >> n >> k;
+        vll v(k);
+        uset s;
+        forn(i, k)
+        {
+            cin >> v[i];
+            s.insert(v[i]);
+        }
+        dbg(v);
+        unordered_map<ll, unordered_set<ll, custom_hash>, custom_hash> m;
+        forn(i, n - 1)
+        {
+            ll a, b;
+            cin >> a >> b;
+            dbg(a);
+            dbg(b);
+            if (s.find(a) == s.end() && s.find(b) != s.end())
+            {
+                m[a].insert(b);
+            }
+            else if (s.find(b) == s.end() && s.find(a) != s.end())
+            {
+                m[b].insert(a);
+            }
+            else if (s.find(a) != s.end() && s.find(b) != s.end())
+            {
+                m[a].insert(b);
+                m[b].insert(a);
+            }
+        }
+        for (auto i : m)
+        {
+            dbg(i.first);
+            dbg(i.second);
+        }
+        string ans = "ACCURATE";
+        uset s1;
+        for (int i = 1; i <= n; i++)
+        {
+            if (s.find(i) == s.end() && m[i].size() == 0)
+            {
+                ans = "WEAK";
+                break;
+            }
+            else if (m[i].size() <= 1 && s.find(i) == s.end())
+            {
+                s1.insert(m[i].begin(), m[i].end());
+            }
+        }
+        if (ans == "WEAK")
+        {
+            cout << ans << endl;
+            continue;
+        }
+        bool flag = false;
+        for (auto i : s)
+        {
+            if (s1.find(i) == s1.end())
+            {
+                dbg(i);
+                flag = true;
+                break;
+            }
+        }
+        if (flag)
+        {
+            ans = "STRONG";
+        }
+        cout << ans << endl;
     }
     return 0;
 }

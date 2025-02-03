@@ -241,6 +241,40 @@ int main()
     cin >> t;
     while (t--)
     {
+        ll n;
+        cin >> n;
+        vvll a(n, vll(n));
+        forn(i, n)
+        {
+            forn(j, n)
+            {
+                cin >> a[i][j];
+            }
+        }
+        multiset<ll> s;
+        forn(i, n)
+        {
+            ll curr = 0;
+            rforn(j, n - 1)
+            {
+                if (a[i][j] != 1)
+                {
+                    break;
+                }
+                curr++;
+            }
+            s.insert(curr);
+        }
+        dbg(s);
+        ll ans = 0;
+        for (auto x : s)
+        {
+            if (x >= ans)
+            {
+                ans++;
+            }
+        }
+        cout << ans << endl;
     }
     return 0;
 }
