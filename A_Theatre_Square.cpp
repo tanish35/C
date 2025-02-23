@@ -113,27 +113,13 @@ ll pow(ll base, ll exponent, ll modulus)
     return result;
 }
 
-#include <chrono>
-
 #ifndef ONLINE_JUDGE
 #define dbg(x)           \
     cerr << #x << " = "; \
     print_debug(x);      \
     cerr << endl;
-
-#define TIME_THIS(func)                                                  \
-    do                                                                   \
-    {                                                                    \
-        auto start = std::chrono::high_resolution_clock::now();          \
-        func;                                                            \
-        auto end = std::chrono::high_resolution_clock::now();            \
-        std::chrono::duration<double, std::milli> elapsed = end - start; \
-        cerr << "Execution time: " << elapsed.count() << " ms" << endl;  \
-    } while (0)
-
 #else
 #define dbg(x)
-#define TIME_THIS(func) func
 #endif
 
 // Forward declaration of print_debug for generic types
@@ -246,45 +232,14 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
-ll steps(vll &a, ll x, ll sum, ll k)
-{
-    dbg(x);
-    ll n = a.size();
-    ll mina = a[0];
-    ll steps = mina - x;
-    sum -= mina;
-    sum += x;
-    if (sum <= k)
-    {
-        dbg(steps);
-        return steps;
-    }
-    for (int i = n - 1; i > 0; i--)
-    {
-        sum -= a[i];
-        sum += x;
-        dbg(sum);
-        steps++;
-        if (sum <= k)
-        {
-            dbg(steps);
-            return steps;
-        }
-    }
-    return -1;
-}
-
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    TIME_THIS({
-        int t;
-        cin >> t;
-        while (t--)
-        {
-        }
-    });
+    ll n, m, a;
+    cin >> n >> m >> a;
+    ll ans = ceil((db)n / a) * ceil((db)m / a);
+    cout << ans << endl;
     return 0;
 }

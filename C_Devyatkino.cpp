@@ -15,15 +15,13 @@ using namespace std;
 #define sorta(a) sort(a.begin(), a.end())
 #define sortd(a) sort(a.begin(), a.end(), greater<int>())
 #define vpll vector<pair<ll, ll>>
-#define forn(i, e) for (ll i = 0; i < e; i++)
-#define forsn(i, s, e) for (ll i = s; i < e; i++)
-#define rforn(i, s) for (ll i = s; i >= 0; i--)
-#define rforsn(i, s, e) for (ll i = s; i >= e; i--)
+#define forn(i,e) for(ll i = 0; i < e; i++)
+#define forsn(i,s,e) for(ll i = s; i < e; i++)
+#define rforn(i,s) for(ll i = s; i >= 0; i--)
+#define rforsn(i,s,e) for(ll i = s; i >= e; i--)
 #define pq priority_queue<ll>
-struct custom_hash
-{
-    static uint64_t splitmix64(uint64_t x)
-    {
+struct custom_hash {
+    static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c
         x += 0x9e3779b97f4a7c15;
         x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
@@ -31,14 +29,13 @@ struct custom_hash
         return x ^ (x >> 31);
     }
 
-    size_t operator()(uint64_t x) const
-    {
+    size_t operator()(uint64_t x) const {
         static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
         return splitmix64(x + FIXED_RANDOM);
     }
 };
 #define umap unordered_map<ll, ll, custom_hash>
-#define uset unordered_set<ll, custom_hash>
+#define uset unordered_set<ll,custom_hash>
 
 /*
 
@@ -97,14 +94,11 @@ struct custom_hash
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⣛⡉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 
 */
-ll pow(ll base, ll exponent, ll modulus)
-{
+ll pow(ll base, ll exponent, ll modulus) {
     ll result = 1;
     base = base % modulus;
-    while (exponent > 0)
-    {
-        if (exponent % 2 == 1)
-        {
+    while (exponent > 0) {
+        if (exponent % 2 == 1) {
             result = (result * base) % modulus;
         }
         exponent = exponent >> 1;
@@ -112,28 +106,52 @@ ll pow(ll base, ll exponent, ll modulus)
     }
     return result;
 }
-
-#include <chrono>
-
 #ifndef ONLINE_JUDGE
 #define dbg(x)           \
     cerr << #x << " = "; \
     print_debug(x);      \
     cerr << endl;
-
-#define TIME_THIS(func)                                                  \
-    do                                                                   \
-    {                                                                    \
-        auto start = std::chrono::high_resolution_clock::now();          \
-        func;                                                            \
-        auto end = std::chrono::high_resolution_clock::now();            \
-        std::chrono::duration<double, std::milli> elapsed = end - start; \
-        cerr << "Execution time: " << elapsed.count() << " ms" << endl;  \
-    } while (0)
-
 #else
 #define dbg(x)
-#define TIME_THIS(func) func
+#endif
+
+#include <chrono>
+
+#ifndef ONLINE_JUDGE
+class Stopwatch
+{
+private:
+    std::chrono::high_resolution_clock::time_point start_time;
+    std::chrono::high_resolution_clock::time_point end_time;
+
+public:
+    void start()
+    {
+        start_time = std::chrono::high_resolution_clock::now();
+    }
+
+    void stop()
+    {
+        end_time = std::chrono::high_resolution_clock::now();
+    }
+
+    double elapsed_ms()
+    {
+        std::chrono::duration<double, std::milli> elapsed = end_time - start_time;
+        return elapsed.count();
+    }
+};
+
+#define START_TIMER  \
+    Stopwatch timer; \
+    timer.start();
+#define STOP_TIMER \
+    timer.stop();  \
+    cerr << "Execution time: " << timer.elapsed_ms() << " ms" << endl;
+
+#else
+#define START_TIMER
+#define STOP_TIMER
 #endif
 
 // Forward declaration of print_debug for generic types
@@ -186,34 +204,6 @@ void print_debug(const set<T> &s)
     cerr << "}";
 }
 
-// Overload for multiset
-template <typename T>
-void print_debug(const multiset<T> &ms)
-{
-    cerr << "{";
-    for (auto it = ms.begin(); it != ms.end(); ++it)
-    {
-        if (it != ms.begin())
-            cerr << ", ";
-        print_debug(*it);
-    }
-    cerr << "}";
-}
-
-// Overload for unordered_set
-template <typename T>
-void print_debug(const unordered_set<T, custom_hash> &us)
-{
-    cerr << "{";
-    for (auto it = us.begin(); it != us.end(); ++it)
-    {
-        if (it != us.begin())
-            cerr << ", ";
-        print_debug(*it);
-    }
-    cerr << "}";
-}
-
 // Overload for map
 template <typename K, typename V>
 void print_debug(const map<K, V> &m)
@@ -246,45 +236,19 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
-ll steps(vll &a, ll x, ll sum, ll k)
-{
-    dbg(x);
-    ll n = a.size();
-    ll mina = a[0];
-    ll steps = mina - x;
-    sum -= mina;
-    sum += x;
-    if (sum <= k)
-    {
-        dbg(steps);
-        return steps;
-    }
-    for (int i = n - 1; i > 0; i--)
-    {
-        sum -= a[i];
-        sum += x;
-        dbg(sum);
-        steps++;
-        if (sum <= k)
-        {
-            dbg(steps);
-            return steps;
-        }
-    }
-    return -1;
-}
-
-int main()
-{
+int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    TIME_THIS({
-        int t;
-        cin >> t;
-        while (t--)
-        {
-        }
-    });
+    START_TIMER
+
+    int t;
+    cin >> t;
+    while (t--) {
+          
+    }
+
+    STOP_TIMER
+
     return 0;
 }

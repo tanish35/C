@@ -113,27 +113,13 @@ ll pow(ll base, ll exponent, ll modulus)
     return result;
 }
 
-#include <chrono>
-
 #ifndef ONLINE_JUDGE
 #define dbg(x)           \
     cerr << #x << " = "; \
     print_debug(x);      \
     cerr << endl;
-
-#define TIME_THIS(func)                                                  \
-    do                                                                   \
-    {                                                                    \
-        auto start = std::chrono::high_resolution_clock::now();          \
-        func;                                                            \
-        auto end = std::chrono::high_resolution_clock::now();            \
-        std::chrono::duration<double, std::milli> elapsed = end - start; \
-        cerr << "Execution time: " << elapsed.count() << " ms" << endl;  \
-    } while (0)
-
 #else
 #define dbg(x)
-#define TIME_THIS(func) func
 #endif
 
 // Forward declaration of print_debug for generic types
@@ -200,6 +186,20 @@ void print_debug(const multiset<T> &ms)
     cerr << "}";
 }
 
+// Overload for vector<pair<T, T>>
+template <typename T>
+void print_debug(const vector<pair<T, T>> &v)
+{
+    cerr << "[";
+    for (auto it = v.begin(); it != v.end(); ++it)
+    {
+        if (it != v.begin())
+            cerr << ", ";
+        print_debug(*it);
+    }
+    cerr << "]";
+}
+
 // Overload for unordered_set
 template <typename T>
 void print_debug(const unordered_set<T, custom_hash> &us)
@@ -246,45 +246,85 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
-ll steps(vll &a, ll x, ll sum, ll k)
-{
-    dbg(x);
-    ll n = a.size();
-    ll mina = a[0];
-    ll steps = mina - x;
-    sum -= mina;
-    sum += x;
-    if (sum <= k)
-    {
-        dbg(steps);
-        return steps;
-    }
-    for (int i = n - 1; i > 0; i--)
-    {
-        sum -= a[i];
-        sum += x;
-        dbg(sum);
-        steps++;
-        if (sum <= k)
-        {
-            dbg(steps);
-            return steps;
-        }
-    }
-    return -1;
-}
-
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    TIME_THIS({
-        int t;
-        cin >> t;
-        while (t--)
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        ll n, s1, s2;
+        cin >> n >> s1 >> s2;
+        s1--;
+        s2--;
+        ll m1;
+        cin >> m1;
+        vvll adj1(n + 1), adj2(n + 1);
+        vpll edges1(m1);
+        set<pair<ll, ll>> edges2;
+        forn(i, m1)
         {
+            ll u, v;
+            cin >> u >> v;
+            u--;
+            v--;
+            if (u > v)
+                swap(u, v);
+            edges1[i] = {u, v};
+            adj1[u].pb(v);
+            adj1[v].pb(u);
         }
-    });
+        ll m2;
+        cin >> m2;
+        forn(i, m2)
+        {
+            ll u, v;
+            cin >> u >> v;
+            u--;
+            v--;
+            if (u > v)
+                swap(u, v);
+            edges2.insert({u, v});
+            adj2[u].pb(v);
+            adj2[v].pb(u);
+        }
+        vvll dist(n + 1, vll(n, INT_MAX));
+        set<pair<ll, pair<ll, ll>>> q;
+        q.insert({0, {s1, s2}});
+        dist[s1][s2] = 0;
+        // modified djiikstra for this question
+        while (!q.empty())
+        {
+            auto [d, p] = *q.begin();
+            q.erase(q.begin());
+            auto [u, v] = p;
+            for (auto e1 : adj1[u])
+            {
+                for (auto e2 : adj2[v])
+                {
+                    if (dist[e1][e2] > d + abs(e1 - e2))
+                    {
+                        q.erase({dist[e1][e2], {e1, e2}});
+                        dist[e1][e2] = d + abs(e1 - e2);
+                        q.insert({dist[e1][e2], {e1, e2}});
+                    }
+                }
+            }
+        }
+        ll ans = INT_MAX;
+        for (auto x : edges1)
+        {
+            if (edges2.find(x) != edges2.end())
+            {
+                ans = min(ans, dist[x.first][x.first]);
+            }
+        }
+        if (ans != INT_MAX)
+            cout << ans << endl;
+        else
+            cout << -1 << endl;
+    }
     return 0;
 }

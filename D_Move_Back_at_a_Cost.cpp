@@ -112,28 +112,52 @@ ll pow(ll base, ll exponent, ll modulus)
     }
     return result;
 }
-
-#include <chrono>
-
 #ifndef ONLINE_JUDGE
 #define dbg(x)           \
     cerr << #x << " = "; \
     print_debug(x);      \
     cerr << endl;
-
-#define TIME_THIS(func)                                                  \
-    do                                                                   \
-    {                                                                    \
-        auto start = std::chrono::high_resolution_clock::now();          \
-        func;                                                            \
-        auto end = std::chrono::high_resolution_clock::now();            \
-        std::chrono::duration<double, std::milli> elapsed = end - start; \
-        cerr << "Execution time: " << elapsed.count() << " ms" << endl;  \
-    } while (0)
-
 #else
 #define dbg(x)
-#define TIME_THIS(func) func
+#endif
+
+#include <chrono>
+
+#ifndef ONLINE_JUDGE
+class Stopwatch
+{
+private:
+    std::chrono::high_resolution_clock::time_point start_time;
+    std::chrono::high_resolution_clock::time_point end_time;
+
+public:
+    void start()
+    {
+        start_time = std::chrono::high_resolution_clock::now();
+    }
+
+    void stop()
+    {
+        end_time = std::chrono::high_resolution_clock::now();
+    }
+
+    double elapsed_ms()
+    {
+        std::chrono::duration<double, std::milli> elapsed = end_time - start_time;
+        return elapsed.count();
+    }
+};
+
+#define START_TIMER  \
+    Stopwatch timer; \
+    timer.start();
+#define STOP_TIMER \
+    timer.stop();  \
+    cerr << "Execution time: " << timer.elapsed_ms() << " ms" << endl;
+
+#else
+#define START_TIMER
+#define STOP_TIMER
 #endif
 
 // Forward declaration of print_debug for generic types
@@ -168,6 +192,23 @@ void print_debug(const vector<T> &v)
         if (it != v.begin())
             cerr << ", ";
         print_debug(*it);
+    }
+    cerr << "]";
+}
+
+// Specialization for queue
+template <typename T>
+void print_debug(queue<T> q)
+{
+    cerr << "[";
+    bool first = true;
+    while (!q.empty())
+    {
+        if (!first)
+            cerr << ", ";
+        first = false;
+        print_debug(q.front());
+        q.pop();
     }
     cerr << "]";
 }
@@ -246,45 +287,85 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
-ll steps(vll &a, ll x, ll sum, ll k)
-{
-    dbg(x);
-    ll n = a.size();
-    ll mina = a[0];
-    ll steps = mina - x;
-    sum -= mina;
-    sum += x;
-    if (sum <= k)
-    {
-        dbg(steps);
-        return steps;
-    }
-    for (int i = n - 1; i > 0; i--)
-    {
-        sum -= a[i];
-        sum += x;
-        dbg(sum);
-        steps++;
-        if (sum <= k)
-        {
-            dbg(steps);
-            return steps;
-        }
-    }
-    return -1;
-}
-
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    TIME_THIS({
-        int t;
-        cin >> t;
-        while (t--)
+    START_TIMER
+
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        ll n;
+        cin >> n;
+        vll a(n);
+        forn(i, n)
         {
+            cin >> a[i];
         }
-    });
+        sorta(a);
+        dbg(a);
+        vll q;
+        vll greater;
+        forn(i, n)
+        {
+            while (!q.empty() && q.back() > a[i])
+            {
+                ll x = q.back();
+                greater.push_back(x);
+                q.pop_back();
+            }
+            dbg(a[i]);
+            dbg(q);
+            if (i != n - 1)
+            {
+                q.push_back(a[i]);
+            }
+            dbg(q);
+        }
+        dbg(q);
+        dbg(greater);
+        sorta(greater);
+        vll ans = q;
+        // dbg(greater);
+        dbg(ans);
+        bool flag = false;
+        if (!greater.empty() && a[n - 1] <= greater[0] + 1)
+        {
+            ans.push_back(a[n - 1]);
+            flag = true;
+        }
+        for (auto x : greater)
+        {
+            ans.push_back(x + 1);
+        }
+        if (!flag)
+        {
+            bool flag1 = false;
+            for (int i = 0; i < ans.size(); i++)
+            {
+                if (ans[i] >= a[n - 1])
+                {
+                    flag1 = true;
+                    ans.insert(ans.begin() + i, a[n - 1] + 1);
+                    break;
+                }
+            }
+            if (!flag1)
+            {
+                ans.push_back(a[n - 1] + 1);
+            }
+        }
+        for (auto x : ans)
+        {
+            cout << x << " ";
+        }
+        cout << endl;
+    }
+
+    STOP_TIMER
+
     return 0;
 }

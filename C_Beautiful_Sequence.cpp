@@ -112,28 +112,52 @@ ll pow(ll base, ll exponent, ll modulus)
     }
     return result;
 }
-
-#include <chrono>
-
 #ifndef ONLINE_JUDGE
 #define dbg(x)           \
     cerr << #x << " = "; \
     print_debug(x);      \
     cerr << endl;
-
-#define TIME_THIS(func)                                                  \
-    do                                                                   \
-    {                                                                    \
-        auto start = std::chrono::high_resolution_clock::now();          \
-        func;                                                            \
-        auto end = std::chrono::high_resolution_clock::now();            \
-        std::chrono::duration<double, std::milli> elapsed = end - start; \
-        cerr << "Execution time: " << elapsed.count() << " ms" << endl;  \
-    } while (0)
-
 #else
 #define dbg(x)
-#define TIME_THIS(func) func
+#endif
+
+#include <chrono>
+
+#ifndef ONLINE_JUDGE
+class Stopwatch
+{
+private:
+    std::chrono::high_resolution_clock::time_point start_time;
+    std::chrono::high_resolution_clock::time_point end_time;
+
+public:
+    void start()
+    {
+        start_time = std::chrono::high_resolution_clock::now();
+    }
+
+    void stop()
+    {
+        end_time = std::chrono::high_resolution_clock::now();
+    }
+
+    double elapsed_ms()
+    {
+        std::chrono::duration<double, std::milli> elapsed = end_time - start_time;
+        return elapsed.count();
+    }
+};
+
+#define START_TIMER  \
+    Stopwatch timer; \
+    timer.start();
+#define STOP_TIMER \
+    timer.stop();  \
+    cerr << "Execution time: " << timer.elapsed_ms() << " ms" << endl;
+
+#else
+#define START_TIMER
+#define STOP_TIMER
 #endif
 
 // Forward declaration of print_debug for generic types
@@ -246,45 +270,50 @@ void print_debug(const unordered_map<K, V, custom_hash> &um)
     cerr << "}";
 }
 
-ll steps(vll &a, ll x, ll sum, ll k)
-{
-    dbg(x);
-    ll n = a.size();
-    ll mina = a[0];
-    ll steps = mina - x;
-    sum -= mina;
-    sum += x;
-    if (sum <= k)
-    {
-        dbg(steps);
-        return steps;
-    }
-    for (int i = n - 1; i > 0; i--)
-    {
-        sum -= a[i];
-        sum += x;
-        dbg(sum);
-        steps++;
-        if (sum <= k)
-        {
-            dbg(steps);
-            return steps;
-        }
-    }
-    return -1;
-}
+ll MOD = 998244353;
 
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    TIME_THIS({
-        int t;
-        cin >> t;
-        while (t--)
+    START_TIMER
+
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        ll n;
+        cin >> n;
+        vll a(n);
+        forn(i, n)
         {
+            cin >> a[i];
         }
-    });
+        ll sub1 = 0, sub2 = 0, sub3 = 0;
+        forn(i, n)
+        {
+            if (a[i] == 1)
+            {
+                sub1++;
+                sub1 %= MOD;
+            }
+            else if (a[i] == 2)
+            {
+                sub2 *= 2;
+                sub2 += sub1;
+                sub2 %= MOD;
+            }
+            else if (a[i] == 3)
+            {
+                sub3 += sub2;
+                sub3 %= MOD;
+            }
+        }
+        cout << sub3 << endl;
+    }
+
+    STOP_TIMER
+
     return 0;
 }
